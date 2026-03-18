@@ -72,7 +72,7 @@ const Home = () => {
                 <span className="italic font-normal">Fast Fashion.</span>
               </h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
-                Every stitch at COUTREE 254 is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
+                Every stitch at COUTUREC is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
               </p>
               <div className="flex items-center justify-center lg:justify-start space-x-12 pt-4 md:pt-8 w-full">
                 <div className="text-center">

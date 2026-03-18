@@ -17,7 +17,7 @@ const RefundsPolicy = () => {
         <div className="space-y-12 text-gray-600 leading-relaxed prose prose-lg max-w-none">
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Returns Eligibility</h2>
-            <p>At COUTREE 254, we take pride in the quality and craftsmanship of our products. If you are not completely satisfied with your purchase, you may return any item within 14 days of delivery, provided it is in its original condition, unworn, and with all tags attached.</p>
+            <p>At COUTUREC, we take pride in the quality and craftsmanship of our products. If you are not completely satisfied with your purchase, you may return any item within 14 days of delivery, provided it is in its original condition, unworn, and with all tags attached.</p>
           </section>
 
           <section>
@@ -32,7 +32,7 @@ const RefundsPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Exchanges</h2>
-            <p>If you wish to exchange an item for a different size or color, please contact our concierge team at concierge@coutree254.com to initiate the process.</p>
+            <p>If you wish to exchange an item for a different size or color, please contact our concierge team at concierge@COUTUREC.com to initiate the process.</p>
           </section>
 
           <section>

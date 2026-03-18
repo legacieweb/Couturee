@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
         <div className="space-y-12 text-gray-600 leading-relaxed prose prose-lg max-w-none">
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Introduction</h2>
-            <p>At COUTREE 254, we value your privacy and are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website or make a purchase.</p>
+            <p>At COUTUREC we value your privacy and are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website or make a purchase.</p>
           </section>
 
           <section>

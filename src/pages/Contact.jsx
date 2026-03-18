@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, Phone, Instagram, Facebook, Twitter } from 'lucide-react'
+import { Mail, MapPin, Phone, Instagram } from 'lucide-react'
 
 const Contact = () => {
   return (
@@ -23,7 +23,7 @@ const Contact = () => {
               <div className="space-y-6">
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Mail size={20} className="text-primary" />
-                  <span>concierge@coutree254.com</span>
+                  <span>concierge@COUTUREC.com</span>
                 </div>
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Phone size={20} className="text-primary" />
@@ -43,9 +43,24 @@ const Contact = () => {
             <div>
               <h2 className="text-[10px] font-bold uppercase tracking-[0.4em] text-accent mb-8">Follow Us</h2>
               <div className="flex space-x-8">
-                <Instagram size={24} className="text-gray-400 hover:text-primary transition-colors cursor-pointer" />
-                <Facebook size={24} className="text-gray-400 hover:text-primary transition-colors cursor-pointer" />
-                <Twitter size={24} className="text-gray-400 hover:text-primary transition-colors cursor-pointer" />
+                <a href="https://www.instagram.com/couturec254/" target="_blank" rel="noopener noreferrer">
+                  <Instagram size={24} className="text-gray-400 hover:text-primary transition-colors" />
+                </a>
+                <a href="https://www.tiktok.com/@couture924" target="_blank" rel="noopener noreferrer">
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    width="24" 
+                    height="24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="1.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="text-gray-400 hover:text-primary transition-colors"
+                  >
+                    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
