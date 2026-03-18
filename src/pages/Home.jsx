@@ -24,7 +24,7 @@ const Home = () => {
             style={{ y: y1 }}
             src="https://static.fibre2fashion.com//articleresources/images/23/2287/988ebe_Big.jpg" 
             className="w-full h-[120%] object-cover grayscale opacity-90"
-            alt="COUTUREE 254 Luxury High Fashion - Kenyan Haute Couture"
+            alt="COUTREE 254 Luxury High Fashion - Kenyan Haute Couture"
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
@@ -47,7 +47,7 @@ const Home = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="flex flex-col items-center space-y-8"
           >
-            <p className="text-[10px] font-bold uppercase tracking-[0.8em] text-accent">Defining Kenyan Haute Couturee</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.8em] text-accent">Setting the Standard for Kenyan Style.</p>
             <Link to="/products" className="group relative px-12 py-5 overflow-hidden border border-white/30 backdrop-blur-sm">
               <span className="relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:text-primary transition-colors duration-500">Explore Collection</span>
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
@@ -72,7 +72,7 @@ const Home = () => {
                 <span className="italic font-normal">Fast Fashion.</span>
               </h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
-                Every stitch at COUTUREE 254 is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
+                Every stitch at COUTREE 254 is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
               </p>
               <div className="flex items-center justify-center lg:justify-start space-x-12 pt-4 md:pt-8 w-full">
                 <div className="text-center">
@@ -173,7 +173,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center text-white">
-          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The Couturee Experience</h2>
+          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The Coutree Experience</h2>
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] mt-6">Watch the Runway Reveal</p>
         </div>
       </section>

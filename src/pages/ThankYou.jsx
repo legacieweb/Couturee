@@ -62,7 +62,7 @@ const ThankYou = () => {
           <div className="pt-20 flex justify-center space-x-12 text-gray-400">
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Instagram size={16} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">@couturee254</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">@coutree254</span>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Mail size={16} />

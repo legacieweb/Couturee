@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
         <div className="space-y-12 text-gray-600 leading-relaxed prose prose-lg max-w-none">
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Introduction</h2>
-            <p>At COUTUREE 254, we value your privacy and are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website or make a purchase.</p>
+            <p>At COUTREE 254, we value your privacy and are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit our website or make a purchase.</p>
           </section>
 
           <section>
@@ -37,7 +37,7 @@ const PrivacyPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Contact Us</h2>
-            <p>If you have any questions about our Privacy Policy, please contact us at concierge@COUTUREE254.com.</p>
+            <p>If you have any questions about our Privacy Policy, please contact us at concierge@COUTREE254.com.</p>
           </section>
         </div>
       </div>

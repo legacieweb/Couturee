@@ -17,7 +17,7 @@ const ShippingPolicy = () => {
         <div className="space-y-12 text-gray-600 leading-relaxed prose prose-lg max-w-none">
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Delivery Estimates</h2>
-            <p>Each COUTUREE 254 piece is handcrafted with precision. Please allow 5-10 business days for standard delivery within Kenya. International shipping times vary by destination and typically take 10-15 business days.</p>
+            <p>Each COUTREE 254 piece is handcrafted with precision. Please allow 5-10 business days for standard delivery within Kenya. International shipping times vary by destination and typically take 10-15 business days.</p>
           </section>
 
           <section>
@@ -37,7 +37,7 @@ const ShippingPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Concierge Support</h2>
-            <p>If you have any questions or concerns about your delivery, please reach out to our concierge team at concierge@couturee254.com.</p>
+            <p>If you have any questions or concerns about your delivery, please reach out to our concierge team at concierge@coutree254.com.</p>
           </section>
         </div>
       </div>

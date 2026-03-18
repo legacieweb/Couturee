@@ -11,12 +11,12 @@ const AboutUs = () => {
           className="text-center mb-20"
         >
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-4">Our Story</p>
-          <h1 className="text-5xl md:text-7xl font-black elegant-font tracking-tighter uppercase">About Couturee 254</h1>
+          <h1 className="text-5xl md:text-7xl font-black elegant-font tracking-tighter uppercase">About Coutree 254</h1>
         </motion.div>
 
         <div className="space-y-12 text-gray-600 leading-relaxed text-lg">
           <p>
-            Founded in the heart of Nairobi, COUTUREE 254 is a contemporary luxury fashion house that blends traditional elegance with modern sophistication. Our name reflects our roots—254, the pride of Kenya—and our commitment to "Couture" craftsmanship.
+            Founded in the heart of Nairobi, COUTREE 254 is a contemporary luxury fashion house that blends traditional elegance with modern sophistication. Our name reflects our roots—254, the pride of Kenya—and our commitment to "Couture" craftsmanship.
           </p>
           <p>
             We believe that every garment tells a story. Our collections are meticulously designed and handcrafted by local artisans, ensuring that each piece meets the highest standards of quality and exclusivity. From gala events to intimate evening gatherings, we provide the modern woman with timeless pieces that exude confidence and grace.
@@ -28,7 +28,7 @@ const AboutUs = () => {
             <div className="flex flex-col justify-center">
               <h3 className="text-2xl font-black elegant-font mb-6 uppercase tracking-tight text-primary">Our Craftsmanship</h3>
               <p className="text-base">
-                Each COUTUREE 254 creation is a testament to the skill of our tailors. We source the finest silks, velvets, and hand-woven fabrics to create textures that feel as luxurious as they look.
+                Each COUTREE 254 creation is a testament to the skill of our tailors. We source the finest silks, velvets, and hand-woven fabrics to create textures that feel as luxurious as they look.
               </p>
             </div>
           </div>

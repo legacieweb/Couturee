@@ -23,7 +23,7 @@ const Contact = () => {
               <div className="space-y-6">
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Mail size={20} className="text-primary" />
-                  <span>concierge@couturee254.com</span>
+                  <span>concierge@coutree254.com</span>
                 </div>
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Phone size={20} className="text-primary" />
