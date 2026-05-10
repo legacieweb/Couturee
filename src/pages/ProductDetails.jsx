@@ -281,52 +281,86 @@ const ProductDetails = () => {
       <AnimatePresence>
         {isSizeGuideOpen && (
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[150] bg-white flex flex-col md:flex-row"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            className="fixed inset-0 z-[150] bg-white flex flex-col md:flex-row overflow-y-auto lg:overflow-hidden"
           >
-            <div className="w-full md:w-1/2 bg-gray-50 p-12 md:p-24 flex flex-col justify-center">
-              <h2 className="text-6xl font-black elegant-font tracking-tighter uppercase mb-12">Size <br /> Anatomy</h2>
-              <div className="space-y-12">
-                {[
-                  { l: 'Bust', d: 'Measure around the fullest part of your chest.' },
-                  { l: 'Waist', d: 'Measure around the narrowest part of your waistline.' },
-                  { l: 'Hips', d: 'Measure around the widest part of your hips.' }
-                ].map(item => (
-                  <div key={item.l} className="border-l-2 border-accent pl-8">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest mb-2">{item.l}</h4>
-                    <p className="text-sm text-gray-500 font-serif italic">{item.d}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 p-12 md:p-24 flex flex-col justify-center relative">
-              <button onClick={() => setIsSizeGuideOpen(false)} className="absolute top-12 right-12">
-                <Plus size={40} className="rotate-45" />
+            {/* Close Button - Desktop */}
+            <button 
+              onClick={() => setIsSizeGuideOpen(false)} 
+              className="hidden md:flex absolute top-12 right-12 z-[160] h-14 w-14 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-all group"
+            >
+              <Plus size={32} className="rotate-45 group-hover:scale-110 transition-transform" />
+            </button>
+
+            {/* Mobile Header (Sticky) */}
+            <div className="md:hidden sticky top-0 z-[160] bg-white/80 backdrop-blur-md border-b border-gray-100 p-6 flex justify-between items-center">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Size Selection Guide</span>
+              <button onClick={() => setIsSizeGuideOpen(false)} className="h-10 w-10 flex items-center justify-center border border-gray-100 rounded-full">
+                <Plus size={20} className="rotate-45" />
               </button>
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b-2 border-primary">
-                    <th className="py-6 text-[10px] font-bold uppercase tracking-widest">Size</th>
-                    <th className="py-6 text-[10px] font-bold uppercase tracking-widest">CM</th>
-                    <th className="py-6 text-[10px] font-bold uppercase tracking-widest">INCH</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100 font-serif">
-                  {['XS', 'S', 'M', 'L', 'XL'].map(size => (
-                    <tr key={size} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-6 font-bold">{size}</td>
-                      <td className="py-6 text-gray-500">82 - 86</td>
-                      <td className="py-6 text-gray-500">32 - 34</td>
-                    </tr>
+            </div>
+
+            {/* Left Section: Info */}
+            <div className="w-full md:w-1/2 bg-gray-50 p-8 md:p-24 flex flex-col justify-center overflow-y-auto">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter uppercase mb-8 md:mb-12">Size <br /> Anatomy</h2>
+                <div className="space-y-8 md:space-y-12">
+                  {[
+                    { l: 'Bust', d: 'Measure around the fullest part of your chest.' },
+                    { l: 'Waist', d: 'Measure around the narrowest part of your waistline.' },
+                    { l: 'Hips', d: 'Measure around the widest part of your hips.' }
+                  ].map(item => (
+                    <div key={item.l} className="border-l-2 border-accent pl-6 md:pl-8">
+                      <h4 className="text-[10px] font-bold uppercase tracking-widest mb-2">{item.l}</h4>
+                      <p className="text-sm text-gray-500 font-serif italic leading-relaxed">{item.d}</p>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-              <div className="mt-16 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-accent">Need a custom fit?</p>
-                <p className="text-sm italic font-serif mt-2">Private tailoring sessions available in Nairobi.</p>
-              </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Section: Table */}
+            <div className="w-full md:w-1/2 p-8 md:p-24 flex flex-col justify-center relative overflow-y-auto bg-white">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+                  <table className="w-full text-left min-w-[300px]">
+                    <thead>
+                      <tr className="border-b-2 border-primary">
+                        <th className="py-6 text-[10px] font-bold uppercase tracking-widest">Size</th>
+                        <th className="py-6 text-[10px] font-bold uppercase tracking-widest">CM</th>
+                        <th className="py-6 text-[10px] font-bold uppercase tracking-widest">INCH</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 font-serif">
+                      {['XS', 'S', 'M', 'L', 'XL'].map(size => (
+                        <tr key={size} className="hover:bg-gray-50 transition-colors group">
+                          <td className="py-6 font-bold group-hover:text-accent transition-colors">{size}</td>
+                          <td className="py-6 text-gray-500">82 - 86</td>
+                          <td className="py-6 text-gray-500">32 - 34</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div className="mt-12 md:mt-16 p-8 bg-gray-50 border border-gray-100">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">Need a custom fit?</p>
+                  <p className="text-sm italic font-serif text-gray-600">Private tailoring sessions available in Nairobi. Our artisans can adjust any piece to your exact measurements.</p>
+                  <button className="mt-6 text-[10px] font-bold uppercase tracking-widest border-b border-primary pb-1 hover:text-accent hover:border-accent transition-all">
+                    Book a Fitting
+                  </button>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
