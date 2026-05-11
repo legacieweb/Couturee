@@ -22,7 +22,7 @@ const TermsOfService = () => {
 
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Use of Content</h2>
-            <p>All content on this website, including but not limited to text, images, logos, and designs, is the property of COUTUREC and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or use any content without our prior written consent.</p>
+            <p>All content on this website, including but not limited to text, images, logos, and designs, is the property of SHABIL and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or use any content without our prior written consent.</p>
           </section>
 
           <section>

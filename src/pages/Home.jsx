@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { products } from '../data/products'
 import { ArrowUpRight, Play, Globe, Award, Sparkles } from 'lucide-react'
-import coutreeVideo from '../coutree video.mp4'
+import shabilVideo from '../coutree video.mp4'
 
 const Home = () => {
   const containerRef = useRef(null)
@@ -24,7 +24,7 @@ const Home = () => {
             style={{ y: y1 }}
             src="https://static.fibre2fashion.com//articleresources/images/23/2287/988ebe_Big.jpg" 
             className="w-full h-[120%] object-cover grayscale opacity-90"
-            alt="COUTREE 254 Luxury High Fashion - Kenyan Haute Couture"
+            alt="SHABIL Luxury High Fashion - Kenyan Haute Couture"
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
@@ -72,7 +72,7 @@ const Home = () => {
                 <span className="italic font-normal">Fast Fashion.</span>
               </h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
-                Every stitch at COUTUREC is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
+                Every stitch at SHABIL is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
               </p>
               <div className="flex items-center justify-center lg:justify-start space-x-12 pt-4 md:pt-8 w-full">
                 <div className="text-center">
@@ -89,10 +89,10 @@ const Home = () => {
           
           <div className="lg:col-span-7 grid grid-cols-2 gap-4 md:gap-6 relative mt-12 lg:mt-0">
             <motion.div style={{ y: typeof window !== 'undefined' && window.innerWidth > 1024 ? y1 : 0 }} className="pt-12 md:pt-24">
-              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/06-13-24_S3_50_10690D_Pink_TK_JS_12-35-47_23184_MH_PXF.jpg?v=1718662984&width=600&height=900&crop=center" alt="Handcrafted pink gala gown detail - COUTREE 254" className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" />
+              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/06-13-24_S3_50_10690D_Pink_TK_JS_12-35-47_23184_MH_PXF.jpg?v=1718662984&width=600&height=900&crop=center" alt="Handcrafted pink gala gown detail - SHABIL" className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" />
             </motion.div>
             <motion.div style={{ y: typeof window !== 'undefined' && window.innerWidth > 1024 ? y2 : 0 }}>
-              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/02-14-24_S3_30_KSWD3111701G_Pink_HY_RL_13-57-55_31613_PXF.jpg?v=1736893632&width=600&height=900&crop=center" alt="Luxury evening dress from COUTREE 254 Nairobi" className="w-full aspect-[3/4] object-cover shadow-2xl" />
+              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/02-14-24_S3_30_KSWD3111701G_Pink_HY_RL_13-57-55_31613_PXF.jpg?v=1736893632&width=600&height=900&crop=center" alt="Luxury evening dress from SHABIL Nairobi" className="w-full aspect-[3/4] object-cover shadow-2xl" />
             </motion.div>
           </div>
         </div>
@@ -164,7 +164,7 @@ const Home = () => {
       {/* Video / Atmosphere Section */}
       <section className="relative h-[80vh] overflow-hidden flex items-center justify-center group">
         <video 
-          src={coutreeVideo} 
+          src={shabilVideo} 
           autoPlay 
           loop 
           muted 
@@ -173,7 +173,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center text-white">
-          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The Coutree Experience</h2>
+          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The SHABIL Experience</h2>
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] mt-6">Watch the Runway Reveal</p>
         </div>
       </section>

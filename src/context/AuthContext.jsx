@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check local storage for persistent login
-    const storedUser = localStorage.getItem('coutree_user');
+    const storedUser = localStorage.getItem('shabil_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -19,12 +19,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('coutree_user', JSON.stringify(userData));
+    localStorage.setItem('shabil_user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('coutree_user');
+    localStorage.removeItem('shabil_user');
   };
 
   return (

@@ -6,21 +6,21 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('coutree_cart');
+    const savedCart = localStorage.getItem('shabil_cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
   const [wishlist, setWishlist] = useState(() => {
-    const savedWishlist = localStorage.getItem('coutree_wishlist');
+    const savedWishlist = localStorage.getItem('shabil_wishlist');
     return savedWishlist ? JSON.parse(savedWishlist) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('coutree_cart', JSON.stringify(cart));
+    localStorage.setItem('shabil_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('coutree_wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('shabil_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
   const addToCart = (product, variant, quantity) => {

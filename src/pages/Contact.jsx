@@ -23,7 +23,7 @@ const Contact = () => {
               <div className="space-y-6">
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Mail size={20} className="text-primary" />
-                  <span>concierge@COUTUREC.com</span>
+                  <span>concierge@shabil.com</span>
                 </div>
                 <div className="flex items-center space-x-6 text-lg text-gray-600">
                   <Phone size={20} className="text-primary" />
@@ -43,10 +43,10 @@ const Contact = () => {
             <div>
               <h2 className="text-[10px] font-bold uppercase tracking-[0.4em] text-accent mb-8">Follow Us</h2>
               <div className="flex space-x-8">
-                <a href="https://www.instagram.com/couturec254/" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.instagram.com/shabil/" target="_blank" rel="noopener noreferrer">
                   <Instagram size={24} className="text-gray-400 hover:text-primary transition-colors" />
                 </a>
-                <a href="https://www.tiktok.com/@couture924" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.tiktok.com/@shabil" target="_blank" rel="noopener noreferrer">
                   <svg 
                     viewBox="0 0 24 24" 
                     width="24" 

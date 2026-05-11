@@ -13,7 +13,7 @@ const Auth = () => {
   const { login } = useAuth()
 
   const handleAdminPrefill = () => {
-    setEmail('admin@coutree254.com')
+    setEmail('admin@shabil.com')
     setPassword('admin123')
     setIsLogin(true)
   }
@@ -21,7 +21,7 @@ const Auth = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    const isAdmin = email === 'admin@coutree254.com' && password === 'admin123'
+    const isAdmin = email === 'admin@shabil.com' && password === 'admin123'
     
     const userData = {
       email,
@@ -62,7 +62,7 @@ const Auth = () => {
         {/* Brand Overlay */}
         <div className="absolute top-12 left-12 z-10">
           <Link to="/" className="text-3xl font-black elegant-font text-white tracking-tighter flex flex-col leading-none">
-            <span>coutree</span>
+            <span>shabil</span>
             <span className="text-[8px] tracking-[0.8em] text-accent ml-1 -mt-1 font-bold">254</span>
           </Link>
         </div>
@@ -100,7 +100,7 @@ const Auth = () => {
           
           <div className="lg:hidden">
             <Link to="/" className="text-xl font-black elegant-font tracking-tighter flex flex-col leading-none text-center">
-              <span>coutree</span>
+              <span>shabil</span>
             </Link>
           </div>
           
@@ -222,7 +222,7 @@ const Auth = () => {
 
         {/* Bottom Footer Section for Auth */}
         <div className="p-12 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300">
-          © 2024 coutree 254 • PRIVATE ACCESS
+          © 2024 shabil • PRIVATE ACCESS
         </div>
 
       </div>

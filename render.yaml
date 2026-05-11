@@ -1,6 +1,6 @@
 services:
   - type: static
-    name: coutree254
+    name: shabil
     env: static
     buildCommand: npm install && npm run build
     publishDir: dist

@@ -294,7 +294,7 @@ const Dashboard = () => {
       {/* Unified Sidebar */}
       <aside className={`fixed inset-y-0 left-0 xl:relative xl:translate-x-0 w-80 bg-white border-r border-gray-100 flex flex-col z-[190] p-10 transform transition-transform duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="mb-16 mt-10 xl:mt-0">
-          <Link to="/" className="text-3xl font-black elegant-font tracking-tighter uppercase leading-none text-primary">Coutree <span className="text-accent italic">254</span></Link>
+          <Link to="/" className="text-3xl font-black elegant-font tracking-tighter uppercase leading-none text-primary">SHABIL</Link>
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mt-2">Personal Office</p>
         </div>
 
@@ -342,7 +342,7 @@ const Dashboard = () => {
       >
         {/* Simple Header */}
         <header className="bg-white border-b border-gray-50 px-8 py-6 flex items-center justify-between xl:justify-end">
-          <Link to="/" className="xl:hidden text-xl font-black elegant-font tracking-tighter uppercase text-primary">Coutree 254</Link>
+          <Link to="/" className="xl:hidden text-xl font-black elegant-font tracking-tighter uppercase text-primary">SHABIL</Link>
           <div className="flex items-center space-x-6">
              <div className="flex flex-col items-end">
                 <span className="text-[10px] font-black uppercase text-primary leading-none">{user.name}</span>

@@ -94,7 +94,7 @@ const Navbar = () => {
             {/* Center: Brand Name (Logo) */}
             <div className="flex justify-center">
               <Link to="/" className="text-2xl md:text-4xl font-black tracking-[-0.05em] elegant-font flex flex-col items-center leading-none">
-                <span className="text-primary">COUTUREC</span>
+                <span className="text-primary">SHABIL</span>
               </Link>
             </div>
 
@@ -145,10 +145,10 @@ const Navbar = () => {
               ))}
             </div>
             <div className="p-12 flex justify-center space-x-8 border-t border-gray-100">
-              <a href="https://www.instagram.com/couturec254/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/shabil/" target="_blank" rel="noopener noreferrer">
                 <Instagram size={20} className="text-gray-400 hover:text-accent transition-colors" />
               </a>
-              <a href="https://www.tiktok.com/@couture924" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.tiktok.com/@shabil" target="_blank" rel="noopener noreferrer">
                 <svg 
                   viewBox="0 0 24 24" 
                   width="20" 
@@ -218,7 +218,7 @@ const Footer = () => (
     {/* Dynamic Background Text - More Layers */}
     <div className="absolute top-10 left-0 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] whitespace-nowrap">
       <div className="text-[25vw] font-black elegant-font leading-none flex animate-marquee">
-        <span className="mx-10">COUTUREC</span>
+        <span className="mx-10">SHABIL</span>
         <span className="mx-10">MAISON KENYA</span>
       </div>
     </div>
@@ -235,7 +235,7 @@ const Footer = () => (
         {/* Brand Statement */}
         <div className="lg:col-span-6 space-y-16">
           <Link to="/" className="text-7xl md:text-9xl font-black elegant-font tracking-tighter leading-none block group">
-            COUTUREC<br/>
+            SHABIL<br/>
           </Link>
           <div className="space-y-6">
             <p className="text-gray-500 text-xl md:text-3xl max-w-xl leading-relaxed font-serif italic">
@@ -245,7 +245,7 @@ const Footer = () => (
           </div>
           <div className="flex space-x-12">
             {[
-              { icon: Instagram, label: 'Instagram', url: 'https://www.instagram.com/couturec254/' }, 
+              { icon: Instagram, label: 'Instagram', url: 'https://www.instagram.com/shabil/' }, 
               { 
                 icon: (props) => (
                   <svg 
@@ -261,7 +261,7 @@ const Footer = () => (
                   </svg>
                 ), 
                 label: 'TikTok', 
-                url: 'https://www.tiktok.com/@couture924' 
+                url: 'https://www.tiktok.com/@shabil' 
               }
             ].map((social) => (
               <a 
@@ -353,7 +353,7 @@ const Footer = () => (
         {/* Left: Copyright */}
         <div className="text-center md:text-left">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-600">
-            © 2026 COUTUREC• ALL RIGHTS RESERVED
+            © 2026 SHABIL• ALL RIGHTS RESERVED
           </p>
         </div>
 

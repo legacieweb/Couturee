@@ -27,7 +27,7 @@ const ThankYou = () => {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6">Maison Confirmation</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6">SHABIL Confirmation</p>
             <h1 className="text-6xl md:text-8xl font-black elegant-font tracking-tighter leading-none uppercase mb-8">
               Gratitude. <br />
               <span className="italic font-normal serif">Bienvenue.</span>
@@ -62,11 +62,11 @@ const ThankYou = () => {
           <div className="pt-20 flex justify-center space-x-12 text-gray-400">
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Instagram size={16} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">@coutree254</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">@shabil</span>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Mail size={16} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">maison@coutree254.com</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">concierge@shabil.com</span>
             </div>
           </div>
         </motion.div>

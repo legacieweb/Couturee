@@ -1,10 +1,10 @@
 import { products as initialProducts } from '../data/products';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'coutree_mock_products',
-  ORDERS: 'coutree_mock_orders',
-  USERS: 'coutree_mock_users',
-  WISHLIST: 'coutree_mock_wishlist'
+  PRODUCTS: 'shabil_mock_products',
+  ORDERS: 'shabil_mock_orders',
+  USERS: 'shabil_mock_users',
+  WISHLIST: 'shabil_mock_wishlist'
 };
 
 export const initializeMockStorage = () => {
