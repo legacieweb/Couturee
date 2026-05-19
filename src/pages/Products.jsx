@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { products } from '../data/products'
+import { products as localProducts } from '../data/products'
+import { api } from '../utils/api'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, X, Search, ChevronRight } from 'lucide-react'
+import { Plus, X, Search, ChevronRight, Loader2 } from 'lucide-react'
 
 const Products = ({ forcedCategory }) => {
   const location = useLocation()
-  const [filteredProducts, setFilteredProducts] = useState(products)
+  const [products, setProducts] = useState([])
+  const [filteredProducts, setFilteredProducts] = useState([])
   const [category, setCategory] = useState(forcedCategory || 'All')
   const [searchQuery, setSearchQuery] = useState('')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const categories = ['All', 'Gala', 'Evening', 'Casual', 'Formal']
+  const categories = ['All', 'Croptops', 'Leather Jackets', 'Leather Dress', 'Trousers', 'Sweatpants']
+
+  useEffect(() => {
+    setProducts(localProducts)
+    setLoading(false)
+  }, [])
 
   useEffect(() => {
     if (forcedCategory) {
@@ -21,8 +29,9 @@ const Products = ({ forcedCategory }) => {
     const params = new URLSearchParams(location.search)
     const catParam = params.get('category')
     const searchParam = params.get('search')
-    if (catParam) setCategory(catParam)
+    setCategory(catParam || 'All')
     if (searchParam) setSearchQuery(searchParam)
+    else setSearchQuery('')
   }, [location, forcedCategory])
 
   useEffect(() => {
@@ -35,30 +44,42 @@ const Products = ({ forcedCategory }) => {
       )
     }
     setFilteredProducts(result)
-  }, [category, searchQuery])
+  }, [category, searchQuery, products])
 
   return (
     <div className="pt-40 min-h-screen bg-white">
       {/* Editorial Header */}
-      <div className="max-w-[1800px] mx-auto px-6 md:px-12 mb-16 md:mb-24">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 md:gap-12">
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12 mb-16">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12">
           <div className="max-w-2xl">
-            <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-4 md:text-accent mb-6 block">Collection Lookbook</span>
-            <h1 className="text-5xl md:text-6xl lg:text-8xl font-black elegant-font tracking-tighter leading-none uppercase">
-              {category === 'All' ? 'Archives' : category}
-            </h1>
+            <motion.span 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6 block"
+            >
+              Collection Archives
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              key={category}
+              className="text-6xl md:text-8xl lg:text-[10vw] font-black elegant-font tracking-tighter leading-[0.8] uppercase"
+            >
+              {category === 'All' ? 'Signature' : category.split(' ')[0]} <br/>
+              <span className="italic font-normal serif lowercase ml-[10vw]">{category === 'All' ? 'Pieces' : category.split(' ')[1] || 'Collection'}</span>
+            </motion.h1>
           </div>
-          <div className="flex items-center justify-between lg:justify-end w-full lg:w-auto lg:space-x-12 border-t border-gray-100 lg:border-none pt-8 lg:pt-0">
-            <div className="text-left lg:text-right">
-              <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Total Pieces</p>
-              <p className="text-xl md:text-2xl font-black elegant-font">{filteredProducts.length}</p>
+          <div className="flex items-center space-x-12">
+            <div className="hidden md:block text-right">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Curation</p>
+              <p className="text-3xl font-black elegant-font">{filteredProducts.length} PIECES</p>
             </div>
             <button 
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="group flex items-center space-x-4 bg-primary text-white px-6 md:px-8 py-4 md:py-5 text-[9px] md:text-[10px] font-bold uppercase tracking-widest hover:bg-accent transition-all"
+              className="h-24 w-24 bg-primary text-white flex flex-col items-center justify-center space-y-2 hover:bg-accent transition-all group"
             >
-              <span>{isFilterOpen ? 'Close' : 'Filter & Sort'}</span>
-              <Plus size={16} className={`transition-transform duration-500 ${isFilterOpen ? 'rotate-45' : ''}`} />
+              <Plus size={20} className={`transition-transform duration-500 ${isFilterOpen ? 'rotate-45' : ''}`} />
+              <span className="text-[8px] font-bold uppercase tracking-widest">Filter</span>
             </button>
           </div>
         </div>
@@ -116,8 +137,13 @@ const Products = ({ forcedCategory }) => {
 
       {/* Product Grid - Lookbook Style */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-24">
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+        {loading ? (
+          <div className="py-32 flex flex-col items-center justify-center space-y-6">
+            <Loader2 size={40} className="animate-spin text-accent" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400">Loading Archives...</p>
+          </div>
+        ) : filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-12 gap-y-12 md:gap-y-24">
             {filteredProducts.map((product, idx) => (
               <motion.div
                 key={product.id}
@@ -127,23 +153,37 @@ const Products = ({ forcedCategory }) => {
                 className="group"
               >
                 <Link to={`/product/${product.id}`}>
-                  <div className="relative aspect-[3/4] overflow-hidden mb-8 bg-gray-100">
+                  <div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-50 group-hover:shadow-2xl transition-all duration-700">
                     <img 
                       src={product.images[0]} 
                       alt={product.name} 
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                     />
-                    <div className="absolute top-8 right-8 text-[10px] font-bold uppercase tracking-widest text-white mix-blend-difference">
-                      KSh {product.price.toLocaleString()}
+                    {/* Category Label */}
+                    <div className="absolute top-0 left-0 p-4 md:p-6 overflow-hidden">
+                      <motion.p 
+                        className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.4em] text-primary/40 group-hover:text-accent transition-colors duration-500"
+                      >
+                        {product.category}
+                      </motion.p>
                     </div>
+                    
+                    {/* Subtle Overlay on Hover */}
+                    <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   </div>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[8px] font-bold uppercase tracking-[0.5em] text-accent mb-2">{product.category}</p>
-                      <h3 className="text-3xl font-black elegant-font tracking-tighter leading-none group-hover:text-accent transition-colors">{product.name}</h3>
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-end">
+                      <h3 className="text-xs md:text-xl font-black elegant-font tracking-tight uppercase leading-tight group-hover:text-accent transition-colors duration-500">
+                        {product.name}
+                      </h3>
                     </div>
-                    <div className="h-12 w-12 border border-gray-100 flex items-center justify-center rounded-full group-hover:bg-primary group-hover:text-white transition-all">
-                      <ChevronRight size={20} strokeWidth={1.5} />
+                    
+                    <div className="flex items-center space-x-4">
+                      <span className="text-[10px] md:text-xs font-bold text-gray-400 tracking-widest">
+                        KSh {product.price.toLocaleString()}
+                      </span>
+                      <div className="flex-grow h-[1px] bg-gray-100 group-hover:bg-accent/30 transition-colors duration-700" />
                     </div>
                   </div>
                 </Link>

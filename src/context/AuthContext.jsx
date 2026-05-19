@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -17,18 +18,36 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('shabil_user', JSON.stringify(userData));
+  const login = async (credentials) => {
+    const data = await api.login(credentials);
+    if (data.user && data.token) {
+      setUser(data.user);
+      localStorage.setItem('shabil_user', JSON.stringify(data.user));
+      localStorage.setItem('shabil_token', data.token);
+      return data;
+    }
+    throw new Error(data.error || 'Login failed');
+  };
+
+  const signup = async (userData) => {
+    const data = await api.signup(userData);
+    if (data.user && data.token) {
+      setUser(data.user);
+      localStorage.setItem('shabil_user', JSON.stringify(data.user));
+      localStorage.setItem('shabil_token', data.token);
+      return data;
+    }
+    throw new Error(data.error || 'Signup failed');
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('shabil_user');
+    localStorage.removeItem('shabil_token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

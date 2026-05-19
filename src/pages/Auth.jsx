@@ -1,42 +1,47 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, Link } from 'react-router-dom'
-import { Mail, Lock, User, ArrowRight, ShieldCheck, ChevronLeft } from 'lucide-react'
+import { Mail, Lock, User, ArrowRight, ShieldCheck, ChevronLeft, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [name, setName] = useState('')
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { login, signup } = useAuth()
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleAdminPrefill = () => {
-    setEmail('admin@shabil.com')
-    setPassword('admin123')
+    setEmail(import.meta.env.VITE_ADMIN_EMAIL || '')
+    setPassword(import.meta.env.VITE_ADMIN_PASSWORD || '')
     setIsLogin(true)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+    setLoading(true)
     
-    const isAdmin = email === 'admin@shabil.com' && password === 'admin123'
-    
-    const userData = {
-      email,
-      name: isAdmin ? 'System Admin' : (name || email.split('@')[0]),
-      role: isAdmin ? 'admin' : 'user',
-      id: isAdmin ? 'admin-001' : `user-${Math.floor(Math.random() * 1000)}`,
-      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    }
-
-    login(userData)
-    
-    if (isAdmin) {
-      navigate('/admin/dashboard')
-    } else {
-      navigate('/dashboard')
+    try {
+      if (isLogin) {
+        const data = await login({ email, password })
+        if (data.user.role === 'admin') {
+          navigate('/admin/dashboard')
+        } else {
+          navigate('/dashboard')
+        }
+      } else {
+        await signup({ name, email, password })
+        navigate('/dashboard')
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -141,6 +146,16 @@ const Auth = () => {
               </motion.h1>
             </div>
 
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 p-4 bg-red-50 text-red-500 text-[10px] font-bold uppercase tracking-widest border-l-2 border-red-500"
+              >
+                {error}
+              </motion.div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-10">
               <AnimatePresence mode='wait'>
                 {!isLogin && (
@@ -175,16 +190,24 @@ const Auth = () => {
                 />
               </div>
 
-              <div className="relative group">
-                <Lock size={18} className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-accent transition-colors" />
+              <div className="relative">
+                <Lock size={18} className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input 
-                  type="password" 
+                  type={showPassword ? "text" : "password"} 
                   placeholder="Secret Password" 
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-100 py-5 pl-10 text-sm font-medium focus:outline-none focus:border-primary transition-colors placeholder:text-gray-300"
+                  className="w-full bg-transparent border-b border-gray-100 py-5 pl-10 pr-12 text-sm font-medium focus:outline-none focus:border-primary transition-colors placeholder:text-gray-300"
                 />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors z-[50] p-2 flex items-center justify-center"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
 
               {isLogin && (
@@ -197,12 +220,13 @@ const Auth = () => {
 
               <button 
                 type="submit" 
-                className="w-full bg-primary text-white py-8 flex items-center justify-between px-10 group hover:bg-black transition-all rounded-sm shadow-xl"
+                disabled={loading}
+                className="w-full bg-primary text-white py-8 flex items-center justify-between px-10 group hover:bg-black transition-all rounded-sm shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="text-[10px] font-bold uppercase tracking-[0.4em]">
-                  {isLogin ? 'Access Account' : 'Confirm Membership'}
+                  {loading ? 'Processing...' : (isLogin ? 'Access Account' : 'Confirm Membership')}
                 </span>
-                <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform text-accent" />
+                {!loading && <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform text-accent" />}
               </button>
             </form>
 

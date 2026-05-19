@@ -2,15 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
-import { 
-  getProducts, getOrders, getCustomers, updateProductStock,
-  addRestockLog
-} from '../utils/mockStorage'
+import { api } from '../utils/api'
+import { products as localProducts } from '../data/products'
 import { 
   LayoutDashboard, Package, ShoppingCart, Users, Settings, 
   LogOut, Plus, Search, Filter, MoreVertical, TrendingUp, 
   ArrowUpRight, ArrowDownRight, DollarSign, Clock, CheckCircle,
-  AlertCircle, Menu, X, ChevronRight, RefreshCw, Home
+  AlertCircle, Menu, X, ChevronRight, RefreshCw, Home, Loader2
 } from 'lucide-react'
 
 const AdminDashboard = () => {
@@ -21,12 +19,29 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState([])
   const [orders, setOrders] = useState([])
   const [customers, setCustomers] = useState([])
+  const [loading, setLoading] = useState(true)
   const mainContentRef = useRef(null)
 
   useEffect(() => {
-    setProducts(getProducts())
-    setOrders(getOrders())
-    setCustomers(getCustomers())
+    const fetchData = async () => {
+      try {
+        const [ordersData] = await Promise.all([
+          api.getOrders()
+        ])
+        setProducts(localProducts)
+        setOrders(Array.isArray(ordersData) ? ordersData : [])
+        // Mock customers as they aren't fully implemented in backend yet
+        setCustomers([
+          { id: 'user-001', name: 'James Macharia', email: 'james@macharia.com', totalOrders: 12, totalSpent: 165000 },
+          { id: 'user-002', name: 'Sarah Wanjiku', email: 'sarah.w@wanjiku.ke', totalOrders: 5, totalSpent: 85000 }
+        ])
+      } catch (error) {
+        console.error('Dashboard data fetch failed:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [])
 
   // Slide to top effect when tab changes
@@ -52,14 +67,6 @@ const AdminDashboard = () => {
     navigate('/')
   }
 
-  const handleRestock = (productId, amount) => {
-    const updated = updateProductStock(productId, amount)
-    if (updated) {
-      addRestockLog(productId, amount, user.name)
-      setProducts(getProducts()) // Refresh local state
-    }
-  }
-
   const menuItems = [
     { label: 'Overview', icon: LayoutDashboard },
     { label: 'Products', icon: Package },
@@ -69,13 +76,45 @@ const AdminDashboard = () => {
   ]
 
   const stats = [
-    { label: 'Total Revenue', value: 'KSh 2.4M', trend: '+12.5%', icon: DollarSign, positive: true },
-    { label: 'Active Orders', value: orders.filter(o => o.status !== 'Delivered').length, trend: '+4', icon: ShoppingCart, positive: true },
-    { label: 'Total Customers', value: customers.length, trend: '+18%', icon: Users, positive: true },
-    { label: 'Low Stock Items', value: products.filter(p => p.stock < 10).length, trend: '-2', icon: AlertCircle, positive: false },
+    { 
+      label: 'Total Revenue', 
+      value: `KSh ${(Array.isArray(orders) ? orders.reduce((acc, o) => acc + Number(o.total || 0), 0) / 1000 : 0).toFixed(1)}K`, 
+      trend: '+12.5%', 
+      icon: DollarSign, 
+      positive: true 
+    },
+    { 
+      label: 'Active Orders', 
+      value: Array.isArray(orders) ? orders.filter(o => o.status !== 'Delivered').length : 0, 
+      trend: '+4', 
+      icon: ShoppingCart, 
+      positive: true 
+    },
+    { 
+      label: 'Total Customers', 
+      value: Array.isArray(customers) ? customers.length : 0, 
+      trend: '+18%', 
+      icon: Users, 
+      positive: true 
+    },
+    { 
+      label: 'Low Stock Items', 
+      value: Array.isArray(products) ? products.filter(p => p.stock < 10).length : 0, 
+      trend: '-2', 
+      icon: AlertCircle, 
+      positive: false 
+    },
   ]
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex-grow flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+          <Loader2 size={40} className="animate-spin text-accent" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400">Synchronizing Command Center...</p>
+        </div>
+      )
+    }
     switch (activeTab) {
       case 'Overview':
         return (
@@ -151,12 +190,6 @@ const AdminDashboard = () => {
                       </div>
                       <div className="text-right">
                         <p className={`text-sm font-black ${product.stock < 10 ? 'text-red-500' : 'text-orange-500'}`}>{product.stock} left</p>
-                        <button 
-                          onClick={() => handleRestock(product.id, 20)}
-                          className="text-[8px] font-black uppercase tracking-[0.2em] text-accent mt-1 flex items-center justify-end"
-                        >
-                          <RefreshCw size={10} className="mr-1" /> Restock
-                        </button>
                       </div>
                     </div>
                   ))}
@@ -177,9 +210,6 @@ const AdminDashboard = () => {
                 <h1 className="text-5xl md:text-8xl font-black elegant-font uppercase tracking-tighter text-primary leading-none">Inventory</h1>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-4">{products.length} Items in Catalog</p>
               </div>
-              <button className="bg-primary text-white px-10 py-5 text-[10px] font-bold uppercase tracking-[0.3em] flex items-center hover:bg-accent transition-all">
-                <Plus size={16} className="mr-3" /> Add Piece
-              </button>
             </div>
 
             <div className="bg-white border border-gray-100">
@@ -239,12 +269,6 @@ const AdminDashboard = () => {
                         </td>
                         <td className="p-8 text-right">
                           <div className="flex items-center justify-end space-x-4">
-                            <button 
-                              onClick={() => handleRestock(product.id, 10)}
-                              className="text-[8px] font-black uppercase tracking-widest bg-gray-50 px-3 py-2 hover:bg-primary hover:text-white transition-all"
-                            >
-                              Restock
-                            </button>
                             <button className="text-gray-400 hover:text-primary transition-colors">
                               <MoreVertical size={18} />
                             </button>

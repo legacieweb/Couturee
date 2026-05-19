@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
-import { getMyOrders, getWishlist } from '../utils/mockStorage'
+import { api } from '../utils/api'
 import { 
   ShoppingBag, Heart, User, Settings, LogOut, Package, MapPin, 
-  CreditCard, ChevronRight, Bell, Search, Star, Clock, Plus, DollarSign, Menu, X, Home
+  CreditCard, ChevronRight, Bell, Search, Star, Clock, Plus, DollarSign, Menu, X, Home, Loader2
 } from 'lucide-react'
 
 const Dashboard = () => {
@@ -14,14 +14,28 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview')
   const [orders, setOrders] = useState([])
   const [wishlist, setWishlist] = useState([])
+  const [loading, setLoading] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const mainContentRef = useRef(null)
 
   useEffect(() => {
-    if (user) {
-      setOrders(getMyOrders(user.id))
-      setWishlist(getWishlist(user.id))
+    const fetchData = async () => {
+      if (user) {
+        try {
+          const ordersData = await api.getOrders(user.id)
+          setOrders(ordersData)
+          
+          // Wishlist is still locally managed in CartContext, but we can display it here
+          const savedWishlist = localStorage.getItem('shabil_wishlist')
+          setWishlist(savedWishlist ? JSON.parse(savedWishlist) : [])
+        } catch (error) {
+          console.error('Failed to fetch dashboard data:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
     }
+    fetchData()
   }, [user])
 
   // Slide to top effect when tab changes
@@ -57,6 +71,14 @@ const Dashboard = () => {
   ]
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex-grow flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+          <Loader2 size={40} className="animate-spin text-accent" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400">Loading Profile...</p>
+        </div>
+      )
+    }
     switch (activeTab) {
       case 'Overview':
         return (
@@ -72,7 +94,7 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { label: 'Total Spent', value: 'KSh 165,000', icon: DollarSign },
+                { label: 'Total Spent', value: `KSh ${orders.reduce((acc, o) => acc + Number(o.total), 0).toLocaleString()}`, icon: DollarSign },
                 { label: 'Active Orders', value: orders.filter(o => o.status !== 'Delivered').length, icon: Package },
                 { label: 'Wishlist Pieces', value: wishlist.length, icon: Heart },
               ].map((stat, i) => (

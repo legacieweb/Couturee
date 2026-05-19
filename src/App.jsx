@@ -80,13 +80,21 @@ const Navbar = () => {
                   <span className="block group-hover:-translate-y-full transition-transform duration-500">Shop</span>
                   <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Shop</span>
                 </Link>
-                <Link to="/products?category=Gala" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Gala</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Gala</span>
+                <Link to="/products?category=Croptops" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Croptops</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Croptops</span>
                 </Link>
-                <Link to="/products?category=Evening" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Evening</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Evening</span>
+                <Link to="/products?category=Leather Jackets" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Leather</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Leather</span>
+                </Link>
+                <Link to="/products?category=Leather Dress" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Dresses</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Dresses</span>
+                </Link>
+                <Link to="/products?category=Trousers" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Trousers</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Trousers</span>
                 </Link>
               </div>
             </div>
@@ -100,13 +108,13 @@ const Navbar = () => {
 
             {/* Right: Actions */}
             <div className="flex justify-end items-center space-x-4 md:space-x-10">
-              <button onClick={() => setIsSearchOpen(true)} className="hidden md:block hover:text-accent transition-colors">
+              <button onClick={() => setIsSearchOpen(true)} className="hover:text-accent transition-colors">
                 <Search size={18} strokeWidth={1.5} />
               </button>
-              <Link to={user ? (user.role === 'admin' ? '/admin/dashboard' : '/dashboard') : '/auth'} className="hidden md:block hover:text-accent transition-colors">
+              <Link to={user ? (user.role === 'admin' ? '/admin/dashboard' : '/dashboard') : '/auth'} className="hover:text-accent transition-colors">
                 <User size={18} strokeWidth={1.5} />
               </Link>
-              <Link to="/wishlist" className="hidden md:block relative hover:text-accent transition-colors">
+              <Link to="/wishlist" className="relative hover:text-accent transition-colors">
                 <Heart size={18} strokeWidth={1.5} className={wishlistCount > 0 ? "text-red-500 fill-red-500" : ""} />
                 <span className="absolute -top-2 -right-2 bg-primary text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{wishlistCount}</span>
               </Link>
@@ -134,10 +142,10 @@ const Navbar = () => {
               </button>
             </div>
             <div className="flex-grow flex flex-col items-center justify-center space-y-8">
-              {['Home', 'Collections', 'Gala', 'Evening', `Wishlist (${wishlistCount})`, `Bag (${cartItemCount})`, 'Account'].map((item, i) => (
+              {['Home', 'Shop', 'Croptops', 'Leather Jackets', 'Leather Dress', 'Trousers', 'Sweatpants'].map((item, i) => (
                 <Link 
                   key={item} 
-                  to={item === 'Home' ? '/' : item === 'Account' ? '/auth' : item.includes('Bag') ? '/cart' : item.includes('Wishlist') ? '/wishlist' : `/products?category=${item}`}
+                  to={item === 'Home' ? '/' : item === 'Shop' ? '/products' : `/products?category=${item}`}
                   className="text-4xl md:text-6xl font-black elegant-font hover:text-accent transition-colors uppercase tracking-tighter"
                 >
                   {item}
@@ -285,10 +293,12 @@ const Footer = () => (
               <h3 className="text-[11px] font-black uppercase tracking-[0.6em] text-accent mb-10">The Collections</h3>
               <ul className="space-y-8">
                 {[
-                  { name: 'New Arrivals', path: '/new-arrivals' },
-                  { name: 'Gala Edit', path: '/gala-edit' },
-                  { name: 'Evening Luxe', path: '/evening-luxe' },
-                  { name: 'Bespoke Atelier', path: '/contact' }
+                  { name: 'All Pieces', path: '/products' },
+                  { name: 'Croptops', path: '/products?category=Croptops' },
+                  { name: 'Leather Jackets', path: '/products?category=Leather Jackets' },
+                  { name: 'Leather Dress', path: '/products?category=Leather Dress' },
+                  { name: 'Trousers', path: '/products?category=Trousers' },
+                  { name: 'Sweatpants', path: '/products?category=Sweatpants' }
                 ].map(link => (
                   <li key={link.name}>
                     <Link to={link.path} className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] hover:text-white transition-all group flex items-center">

@@ -3,31 +3,86 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronRight, ShieldCheck, Lock, CreditCard, Smartphone } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+import { api } from '../utils/api'
+import { PaystackButton } from 'react-paystack'
 
 const Checkout = () => {
   const { cart, clearCart } = useCart()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    address: '',
+    city: 'Nairobi',
+    phone: '',
+    postalCode: ''
+  })
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
   const shipping = 500
   const total = subtotal + shipping
 
-  const handlePlaceOrder = (e) => {
-    e.preventDefault()
+  const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handlePlaceOrder = async (reference) => {
     setLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
+    
+    try {
+      const orderData = {
+        user_id: user?.id || null,
+        customer_name: formData.name,
+        payment_reference: reference,
+        items: cart.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          variantId: item.variantId,
+          size: item.selectedSize,
+          color: item.selectedColor
+        })),
+        total: total,
+        shipping_details: formData
+      }
+
+      await api.createOrder(orderData)
       clearCart()
       navigate('/thank-you')
-    }, 2000)
+    } catch (error) {
+      console.error('Failed to place order:', error)
+      alert('Order recording failed. Please contact support with your payment reference: ' + reference)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const componentProps = {
+    email: formData.email,
+    amount: total * 100, // Paystack amount is in kobo/cents
+    metadata: {
+      name: formData.name,
+      phone: formData.phone,
+    },
+    publicKey,
+    text: "Complete Purchase",
+    onSuccess: (reference) => handlePlaceOrder(reference.reference),
+    onClose: () => alert("Transaction was not completed, window closed."),
   }
 
   if (cart.length === 0) {
     navigate('/cart')
     return null
   }
+
+  const isFormValid = formData.name && formData.email && formData.address && formData.city && formData.phone;
 
   return (
     <div className="pt-40 pb-24 bg-white min-h-screen">
@@ -39,18 +94,32 @@ const Checkout = () => {
             <div>
               <h1 className="text-4xl font-black elegant-font tracking-tighter uppercase mb-12">Checkout</h1>
               
-              <form onSubmit={handlePlaceOrder} className="space-y-16">
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-16">
                 {/* Contact Information */}
                 <section>
                   <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Contact Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Full Name</label>
-                      <input required type="text" className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                      <input 
+                        required 
+                        type="text" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email Address</label>
-                      <input required type="email" className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                      <input 
+                        required 
+                        type="email" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      />
                     </div>
                   </div>
                 </section>
@@ -61,20 +130,49 @@ const Checkout = () => {
                   <div className="space-y-8">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Delivery Address</label>
-                      <input required type="text" placeholder="Apartment, suite, etc." className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                      <input 
+                        required 
+                        type="text" 
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        placeholder="Apartment, suite, etc." 
+                        className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">City</label>
-                        <input required type="text" defaultValue="Nairobi" className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                        <input 
+                          required 
+                          type="text" 
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Phone (M-PESA)</label>
-                        <input required type="tel" placeholder="07XX XXX XXX" className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                        <input 
+                          required 
+                          type="tel" 
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="07XX XXX XXX" 
+                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Postal Code</label>
-                        <input type="text" className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" />
+                        <input 
+                          type="text" 
+                          name="postalCode"
+                          value={formData.postalCode}
+                          onChange={handleInputChange}
+                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                        />
                       </div>
                     </div>
                   </div>
@@ -86,41 +184,33 @@ const Checkout = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-6 border-2 border-primary flex items-center justify-between cursor-pointer">
                       <div className="flex items-center space-x-4">
-                        <Smartphone size={20} className="text-primary" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest">M-PESA</span>
+                        <CreditCard size={20} className="text-primary" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Paystack (Card/M-PESA)</span>
                       </div>
                       <div className="h-4 w-4 rounded-full border-4 border-primary" />
-                    </div>
-                    <div className="p-6 border border-gray-100 flex items-center justify-between cursor-pointer opacity-50">
-                      <div className="flex items-center space-x-4">
-                        <CreditCard size={20} className="text-gray-400" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Card</span>
-                      </div>
-                      <div className="h-4 w-4 rounded-full border border-gray-200" />
                     </div>
                   </div>
                   <div className="mt-8 p-6 bg-gray-50 flex items-start space-x-4">
                     <Info size={16} className="text-accent mt-1" />
                     <p className="text-xs text-gray-500 leading-relaxed font-serif italic">
-                      You will receive an M-PESA prompt on your phone once you click "Complete Purchase". Please have your phone ready.
+                      Secure checkout via Paystack. Supports all major cards and M-PESA.
                     </p>
                   </div>
                 </section>
 
-                <button 
-                  disabled={loading}
-                  type="submit"
-                  className="w-full h-20 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-accent transition-all flex items-center justify-center space-x-4 disabled:bg-gray-200 disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>Complete Purchase</span>
-                      <ChevronRight size={16} />
-                    </>
-                  )}
-                </button>
+                {isFormValid ? (
+                  <PaystackButton 
+                    {...componentProps}
+                    className="w-full h-20 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-accent transition-all flex items-center justify-center space-x-4"
+                  />
+                ) : (
+                  <button 
+                    disabled
+                    className="w-full h-20 bg-gray-100 text-gray-400 text-[10px] font-bold uppercase tracking-[0.4em] cursor-not-allowed flex items-center justify-center"
+                  >
+                    Please fill all shipping details
+                  </button>
+                )}
               </form>
             </div>
           </div>
