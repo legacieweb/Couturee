@@ -101,16 +101,30 @@ const Navbar = () => {
 
             {/* Center: Brand Name (Logo) */}
             <div className="flex justify-center">
-              <Link to="/" className="flex items-center group relative">
-                <motion.span 
-                  whileHover={{ scale: 1.1, letterSpacing: "0.1em" }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="text-2xl md:text-4xl font-black elegant-font uppercase tracking-tighter cursor-pointer relative z-10"
-                >
-                  Shabil
-                </motion.span>
+              <Link to="/" className="flex items-center group relative overflow-hidden py-2 px-4">
+                <div className="flex overflow-hidden relative">
+                  {"SHABIL".split("").map((char, index) => (
+                    <motion.span
+                      key={index}
+                      initial={{ y: 0 }}
+                      whileHover={{ y: "-100%" }}
+                      transition={{ 
+                        duration: 0.5, 
+                        delay: index * 0.03, 
+                        ease: [0.6, 0.01, -0.05, 0.95] 
+                      }}
+                      className="text-2xl md:text-4xl font-black elegant-font tracking-tighter leading-none relative block"
+                    >
+                      <span className="block">{char}</span>
+                      <span className="absolute top-full left-0 block text-accent">{char}</span>
+                    </motion.span>
+                  ))}
+                </div>
                 <motion.div 
-                  className="absolute inset-0 bg-accent/10 scale-0 group-hover:scale-150 blur-xl rounded-full transition-transform duration-500"
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  transition={{ duration: 0.5, ease: "circOut" }}
+                  className="absolute bottom-0 left-0 w-full h-[2px] bg-accent origin-left"
                 />
               </Link>
             </div>

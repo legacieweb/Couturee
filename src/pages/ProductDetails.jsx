@@ -204,7 +204,7 @@ const ProductDetails = () => {
                       className={`w-full h-20 text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center ${inStock ? 'bg-accent text-white hover:bg-primary' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                       disabled={!inStock}
                     >
-                      {inStock ? 'Secure Now (Buy Now)' : 'Archive (Out of Stock)'}
+                      {inStock ? 'Buy Now' : 'Archive (Out of Stock)'}
                     </button>
 
                     <div className="flex space-x-4">
