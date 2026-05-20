@@ -1,10 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { CheckCircle, ArrowRight, Instagram, Mail } from 'lucide-react'
 
 const ThankYou = () => {
-  const orderNumber = `ORD-${Math.floor(Math.random() * 90000) + 10000}`
+  const location = useLocation()
+  const order = location.state?.order
+  const orderNumber = order?.order_number || `ORD-${Math.floor(Math.random() * 90000) + 10000}`
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 pt-40 pb-20 overflow-hidden relative">
@@ -27,7 +29,7 @@ const ThankYou = () => {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6">SHABIL Confirmation</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6">Shabil Confirmation</p>
             <h1 className="text-6xl md:text-8xl font-black elegant-font tracking-tighter leading-none uppercase mb-8">
               Gratitude. <br />
               <span className="italic font-normal serif">Bienvenue.</span>
@@ -62,11 +64,11 @@ const ThankYou = () => {
           <div className="pt-20 flex justify-center space-x-12 text-gray-400">
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Instagram size={16} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">@shabil</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">@Shabilkenya</span>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:text-accent transition-colors">
               <Mail size={16} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">concierge@shabil.com</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">concierge@Shabilkenya.com</span>
             </div>
           </div>
         </motion.div>

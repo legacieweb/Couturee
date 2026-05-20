@@ -24,10 +24,17 @@ CREATE TABLE IF NOT EXISTS products (
 -- Orders Table
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
+    order_number VARCHAR(50) UNIQUE,
     user_id INTEGER REFERENCES users(id),
     customer_name VARCHAR(255),
+    payment_reference VARCHAR(255),
     items JSONB NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(50) DEFAULT 'Pending',
+    amount_paid DECIMAL(10, 2),
+    balance_due DECIMAL(10, 2),
+    payment_option VARCHAR(50),
+    delivery_method VARCHAR(50),
+    shipping_details JSONB,
+    status VARCHAR(50) DEFAULT 'Processing',
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

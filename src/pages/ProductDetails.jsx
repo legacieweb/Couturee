@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { products } from '../data/products'
 import { categorySizeGuides } from '../data/sizeGuides'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,6 +8,7 @@ import { useCart } from '../context/CartContext'
 
 const ProductDetails = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { addToCart, toggleWishlist, isInWishlist } = useCart()
   const [product, setProduct] = useState(null)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -49,6 +50,13 @@ const ProductDetails = () => {
       addToCart(product, currentVariant, quantity);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 3000);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (inStock && currentVariant) {
+      addToCart(product, currentVariant, quantity);
+      navigate('/checkout');
     }
   };
 
@@ -176,29 +184,37 @@ const ProductDetails = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col space-y-4 pt-6">
-                  <AnimatePresence>
-                    {addedToCart && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="bg-green-50 text-green-700 p-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center space-x-2"
-                      >
-                        <Check size={14} />
-                        <span>Added to your collection</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col space-y-4 pt-6">
+                    <AnimatePresence>
+                      {addedToCart && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="bg-green-50 text-green-700 p-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center space-x-2"
+                        >
+                          <Check size={14} />
+                          <span>Added to your collection</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    
                     <button 
-                      onClick={handleAddToCart}
-                      className={`flex-grow h-20 text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center ${inStock ? 'bg-primary text-white hover:bg-accent' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                      onClick={handleBuyNow}
+                      className={`w-full h-20 text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center ${inStock ? 'bg-accent text-white hover:bg-primary' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                       disabled={!inStock}
                     >
-                      {inStock ? 'Add to Collection' : 'Archive (Out of Stock)'}
+                      {inStock ? 'Secure Now (Buy Now)' : 'Archive (Out of Stock)'}
                     </button>
+
+                    <div className="flex space-x-4">
+                      <button 
+                        onClick={handleAddToCart}
+                        className={`flex-grow h-20 text-[10px] font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center ${inStock ? 'bg-primary text-white hover:bg-accent' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                        disabled={!inStock}
+                      >
+                        {inStock ? 'Add to Collection' : 'Archive (Out of Stock)'}
+                      </button>
                     <button 
                       onClick={() => toggleWishlist(product)}
                       className="h-20 w-20 border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-all group"

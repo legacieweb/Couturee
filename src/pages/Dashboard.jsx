@@ -16,7 +16,27 @@ const Dashboard = () => {
   const [wishlist, setWishlist] = useState([])
   const [loading, setLoading] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [claimOrderNumber, setClaimOrderNumber] = useState('')
+  const [claimStatus, setClaimStatus] = useState({ loading: false, message: '', error: '' })
   const mainContentRef = useRef(null)
+
+  const handleClaimOrder = async (e) => {
+    e.preventDefault()
+    setClaimStatus({ loading: true, message: '', error: '' })
+    try {
+      const response = await api.claimOrder({
+        order_number: claimOrderNumber,
+        user_id: user.id
+      })
+      setClaimStatus({ loading: false, message: response.message, error: '' })
+      setClaimOrderNumber('')
+      // Refresh orders
+      const ordersData = await api.getOrders(user.id)
+      setOrders(ordersData)
+    } catch (error) {
+      setClaimStatus({ loading: false, message: '', error: error.message || 'Failed to claim order' })
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +46,7 @@ const Dashboard = () => {
           setOrders(ordersData)
           
           // Wishlist is still locally managed in CartContext, but we can display it here
-          const savedWishlist = localStorage.getItem('shabil_wishlist')
+          const savedWishlist = localStorage.getItem('maison_wishlist')
           setWishlist(savedWishlist ? JSON.parse(savedWishlist) : [])
         } catch (error) {
           console.error('Failed to fetch dashboard data:', error)
@@ -64,6 +84,7 @@ const Dashboard = () => {
   const menuItems = [
     { label: 'Overview', icon: User },
     { label: 'My Orders', icon: Package },
+    { label: 'Claim Order', icon: Search },
     { label: 'Wishlist', icon: Heart },
     { label: 'Addresses', icon: MapPin },
     { label: 'Payment Methods', icon: CreditCard },
@@ -157,16 +178,26 @@ const Dashboard = () => {
                     <tbody className="divide-y divide-gray-50">
                       {orders.map((order) => (
                         <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
-                          <td className="p-8 font-black elegant-font text-primary">{order.id}</td>
-                          <td className="p-8 text-sm font-medium text-gray-500">{order.date}</td>
+                          <td className="p-8 font-black elegant-font text-primary">{order.order_number || order.id}</td>
+                          <td className="p-8 text-sm font-medium text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
                           <td className="p-8">
-                            <span className={`text-[8px] font-black uppercase tracking-widest px-4 py-1 rounded-full ${order.status === 'Delivered' ? 'bg-green-50 text-green-600' : 'bg-accent/10 text-accent'}`}>
-                              {order.status}
-                            </span>
+                            <div className="flex flex-col space-y-2">
+                              <span className={`text-[8px] w-fit font-black uppercase tracking-widest px-4 py-1 rounded-full ${order.status === 'Delivered' ? 'bg-green-50 text-green-600' : 'bg-accent/10 text-accent'}`}>
+                                {order.status || 'Processing'}
+                              </span>
+                              {order.balance_due > 0 && (
+                                <span className="text-[7px] font-bold uppercase text-orange-500">Balance Due: KSh {order.balance_due.toLocaleString()}</span>
+                              )}
+                            </div>
                           </td>
-                          <td className="p-8 font-black text-primary">KSh {order.total.toLocaleString()}</td>
+                          <td className="p-8">
+                            <div className="flex flex-col">
+                              <span className="font-black text-primary">KSh {order.total.toLocaleString()}</span>
+                              <span className="text-[7px] font-bold text-gray-400 uppercase">Paid: KSh {order.amount_paid?.toLocaleString()}</span>
+                            </div>
+                          </td>
                           <td className="p-8 text-right">
-                            <button className="text-[10px] font-bold uppercase tracking-widest text-accent border-b border-accent pb-1">View Piece</button>
+                            <button className="text-[10px] font-bold uppercase tracking-widest text-accent border-b border-accent pb-1 text-nowrap">Track Piece</button>
                           </td>
                         </tr>
                       ))}
@@ -177,6 +208,58 @@ const Dashboard = () => {
                 <div className="p-20 text-center">
                   <Package size={40} className="text-gray-200 mx-auto mb-6" />
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">No orders placed yet</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )
+      case 'Claim Order':
+        return (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-10 pt-10"
+          >
+            <h1 className="text-5xl md:text-8xl font-black elegant-font uppercase tracking-tighter text-primary leading-none">{activeTab}</h1>
+            <div className="max-w-xl bg-white p-10 border border-gray-100 space-y-10">
+              <div className="space-y-4">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary">Claim Past Guest Order</h3>
+                <p className="text-sm font-serif italic text-gray-500 leading-relaxed">
+                  Purchased as a guest? Enter your Order Number from your digital receipt to link it to your account.
+                </p>
+              </div>
+
+              <form onSubmit={handleClaimOrder} className="space-y-8">
+                <div className="space-y-4">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Order Number</label>
+                  <input 
+                    type="text" 
+                    value={claimOrderNumber}
+                    onChange={(e) => setClaimOrderNumber(e.target.value.toUpperCase())}
+                    placeholder="ORD-XXXXXXX" 
+                    required
+                    className="w-full bg-transparent border-b border-gray-100 py-3 text-sm font-bold text-primary focus:outline-none focus:border-accent placeholder:text-gray-200" 
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  disabled={claimStatus.loading}
+                  className="w-full h-16 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-accent transition-all flex items-center justify-center disabled:bg-gray-200"
+                >
+                  {claimStatus.loading ? <Loader2 className="animate-spin mr-2" size={16} /> : 'Claim Archive'}
+                </button>
+              </form>
+
+              {claimStatus.message && (
+                <div className="p-6 bg-green-50 border border-green-100">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-green-600">{claimStatus.message}</p>
+                </div>
+              )}
+
+              {claimStatus.error && (
+                <div className="p-6 bg-red-50 border border-red-100">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">{claimStatus.error}</p>
                 </div>
               )}
             </div>
@@ -316,8 +399,10 @@ const Dashboard = () => {
       {/* Unified Sidebar */}
       <aside className={`fixed inset-y-0 left-0 xl:relative xl:translate-x-0 w-80 bg-white border-r border-gray-100 flex flex-col z-[190] p-10 transform transition-transform duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="mb-16 mt-10 xl:mt-0">
-          <Link to="/" className="text-3xl font-black elegant-font tracking-tighter uppercase leading-none text-primary">SHABIL</Link>
-          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mt-2">Personal Office</p>
+          <Link to="/" className="flex items-center">
+            <img src="https://i.imgur.com/QPJRRvJ.png" alt="MAISON KENYA" className="h-12 w-auto object-contain" />
+          </Link>
+          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mt-4">Personal Office</p>
         </div>
 
         <nav className="flex-grow space-y-2">
@@ -364,7 +449,9 @@ const Dashboard = () => {
       >
         {/* Simple Header */}
         <header className="bg-white border-b border-gray-50 px-8 py-6 flex items-center justify-between xl:justify-end">
-          <Link to="/" className="xl:hidden text-xl font-black elegant-font tracking-tighter uppercase text-primary">SHABIL</Link>
+          <Link to="/" className="xl:hidden">
+            <img src="https://i.imgur.com/QPJRRvJ.png" alt="Logo" className="h-10 w-auto object-contain" />
+          </Link>
           <div className="flex items-center space-x-6">
              <div className="flex flex-col items-end">
                 <span className="text-[10px] font-black uppercase text-primary leading-none">{user.name}</span>

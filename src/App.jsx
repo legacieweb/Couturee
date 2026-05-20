@@ -101,8 +101,17 @@ const Navbar = () => {
 
             {/* Center: Brand Name (Logo) */}
             <div className="flex justify-center">
-              <Link to="/" className="text-2xl md:text-4xl font-black tracking-[-0.05em] elegant-font flex flex-col items-center leading-none">
-                <span className="text-primary">SHABIL</span>
+              <Link to="/" className="flex items-center group relative">
+                <motion.span 
+                  whileHover={{ scale: 1.1, letterSpacing: "0.1em" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="text-2xl md:text-4xl font-black elegant-font uppercase tracking-tighter cursor-pointer relative z-10"
+                >
+                  Shabil
+                </motion.span>
+                <motion.div 
+                  className="absolute inset-0 bg-accent/10 scale-0 group-hover:scale-150 blur-xl rounded-full transition-transform duration-500"
+                />
               </Link>
             </div>
 
@@ -226,8 +235,8 @@ const Footer = () => (
     {/* Dynamic Background Text - More Layers */}
     <div className="absolute top-10 left-0 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] whitespace-nowrap">
       <div className="text-[25vw] font-black elegant-font leading-none flex animate-marquee">
-        <span className="mx-10">SHABIL</span>
-        <span className="mx-10">MAISON KENYA</span>
+        <span className="mx-10">Shabil</span>
+        <span className="mx-10">NAIROBI ARCHIVE</span>
       </div>
     </div>
     <div className="absolute bottom-20 right-0 w-full overflow-hidden pointer-events-none select-none opacity-[0.02] whitespace-nowrap">
@@ -242,13 +251,10 @@ const Footer = () => (
         
         {/* Brand Statement */}
         <div className="lg:col-span-6 space-y-16">
-          <Link to="/" className="text-7xl md:text-9xl font-black elegant-font tracking-tighter leading-none block group">
-            SHABIL<br/>
+          <Link to="/" className="block group">
+            <img src="https://i.imgur.com/QPJRRvJ.png" alt="Logo" className="h-24 md:h-40 w-auto object-contain brightness-0 invert" />
           </Link>
           <div className="space-y-6">
-            <p className="text-gray-500 text-xl md:text-3xl max-w-xl leading-relaxed font-serif italic">
-              "Redefining the boundaries of Kenyan craftsmanship. A legacy of elegance, a future of innovation."
-            </p>
             <div className="w-20 h-1 bg-accent" />
           </div>
           <div className="flex space-x-12">
@@ -363,7 +369,7 @@ const Footer = () => (
         {/* Left: Copyright */}
         <div className="text-center md:text-left">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-600">
-            © 2026 SHABIL• ALL RIGHTS RESERVED
+            © 2026 Shabil • ALL RIGHTS RESERVED
           </p>
         </div>
 

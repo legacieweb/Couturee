@@ -35,7 +35,7 @@ const Home = () => {
           <img 
             src="https://static.fibre2fashion.com//articleresources/images/23/2287/988ebe_Big.jpg" 
             className="w-full h-full object-cover grayscale"
-            alt="SHABIL Background"
+            alt="Shabil Background"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0a]" />
         </motion.div>
@@ -63,7 +63,7 @@ const Home = () => {
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full pointer-events-none select-none overflow-hidden"
             >
               <h2 className="text-[25vw] font-black elegant-font opacity-[0.03] leading-none whitespace-nowrap text-white">
-                MAISON SHABIL
+                Shabil
               </h2>
             </motion.div>
 
@@ -162,7 +162,7 @@ const Home = () => {
                 <span className="italic font-normal">Fast Fashion.</span>
               </h2>
               <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
-                Every stitch at SHABIL is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
+                Every stitch is a deliberate act of artistry. We source the finest silks from the coast and hand-bead every gown in our Westlands atelier.
               </p>
               <div className="flex items-center justify-center lg:justify-start space-x-12 pt-4 md:pt-8 w-full">
                 <div className="text-center">
@@ -179,10 +179,10 @@ const Home = () => {
           
           <div className="lg:col-span-7 grid grid-cols-2 gap-4 md:gap-6 relative mt-12 lg:mt-0">
             <motion.div style={{ y: typeof window !== 'undefined' && window.innerWidth > 1024 ? y1 : 0 }} className="pt-12 md:pt-24">
-              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/06-13-24_S3_50_10690D_Pink_TK_JS_12-35-47_23184_MH_PXF.jpg?v=1718662984&width=600&height=900&crop=center" alt="Handcrafted pink gala gown detail - SHABIL" className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" />
+              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/06-13-24_S3_50_10690D_Pink_TK_JS_12-35-47_23184_MH_PXF.jpg?v=1718662984&width=600&height=900&crop=center" alt="Handcrafted pink gala gown detail" className="w-full aspect-[3/4] object-cover grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" />
             </motion.div>
             <motion.div style={{ y: typeof window !== 'undefined' && window.innerWidth > 1024 ? y2 : 0 }}>
-              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/02-14-24_S3_30_KSWD3111701G_Pink_HY_RL_13-57-55_31613_PXF.jpg?v=1736893632&width=600&height=900&crop=center" alt="Luxury evening dress from SHABIL Nairobi" className="w-full aspect-[3/4] object-cover shadow-2xl" />
+              <img src="https://cdn.shopify.com/s/files/1/0293/9277/files/02-14-24_S3_30_KSWD3111701G_Pink_HY_RL_13-57-55_31613_PXF.jpg?v=1736893632&width=600&height=900&crop=center" alt="Luxury evening dress from Nairobi" className="w-full aspect-[3/4] object-cover shadow-2xl" />
             </motion.div>
           </div>
         </div>
@@ -273,7 +273,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center text-white">
-          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The SHABIL Experience</h2>
+          <h2 className="text-4xl md:text-6xl font-black elegant-font tracking-tighter">The Shabil Experience</h2>
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] mt-6">Watch the Runway Reveal</p>
         </div>
       </section>

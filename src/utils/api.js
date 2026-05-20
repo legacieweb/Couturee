@@ -72,5 +72,43 @@ export const api = {
       body: JSON.stringify(orderData)
     });
     return handleResponse(res);
+  },
+  claimOrder: async (claimData) => {
+    const res = await fetch(`${API_URL}/orders/claim`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(claimData)
+    });
+    return handleResponse(res);
+  },
+  updateOrderStatus: async (orderId, status) => {
+    const res = await fetch(`${API_URL}/orders/${orderId}/status`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify({ status })
+    });
+    return handleResponse(res);
+  },
+  deleteOrder: async (orderId) => {
+    const res = await fetch(`${API_URL}/orders/${orderId}`, {
+      method: 'DELETE',
+      headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+
+  // Customers
+  getCustomers: async () => {
+    const res = await fetch(`${API_URL}/users`, {
+      headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+  deleteCustomer: async (userId) => {
+    const res = await fetch(`${API_URL}/users/${userId}`, {
+      method: 'DELETE',
+      headers: getHeaders()
+    });
+    return handleResponse(res);
   }
 };

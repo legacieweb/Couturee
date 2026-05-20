@@ -15,12 +15,6 @@ const Auth = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleAdminPrefill = () => {
-    setEmail(import.meta.env.VITE_ADMIN_EMAIL || '')
-    setPassword(import.meta.env.VITE_ADMIN_PASSWORD || '')
-    setIsLogin(true)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
@@ -229,24 +223,12 @@ const Auth = () => {
                 {!loading && <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform text-accent" />}
               </button>
             </form>
-
-            <div className="mt-20 pt-10 border-t border-gray-50 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-8">Management Concierge</p>
-              <button 
-                onClick={handleAdminPrefill}
-                className="inline-flex items-center space-x-3 text-accent hover:text-primary transition-colors"
-              >
-                <ShieldCheck size={18} />
-                <span className="text-[10px] font-bold uppercase tracking-widest border-b border-transparent hover:border-primary pb-1">Enter Admin Portal</span>
-              </button>
-            </div>
-
           </div>
         </div>
 
         {/* Bottom Footer Section for Auth */}
-        <div className="p-12 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-gray-300">
-          © 2024 shabil • PRIVATE ACCESS
+        <div className="p-12 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-black">
+          © 2026 shabil • PRIVATE ACCESS
         </div>
 
       </div>
