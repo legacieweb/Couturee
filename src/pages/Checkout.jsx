@@ -11,14 +11,14 @@ import 'jspdf-autotable'
 import { AnimatePresence } from 'framer-motion'
 
 const DELIVERY_LOCATIONS = [
-  { city: 'Nairobi', fee: 200 },
-  { city: 'Mombasa', fee: 500 },
-  { city: 'Kisumu', fee: 500 },
-  { city: 'Nakuru', fee: 500 },
-  { city: 'Eldoret', fee: 500 },
-  { city: 'Thika', fee: 500 },
-  { city: 'Kiambu', fee: 500 },
-  { city: 'Other (Rest of Kenya)', fee: 500 },
+  { city: 'Nairobi', fee: 100 },
+  { city: 'Mombasa', fee: 200 },
+  { city: 'Kisumu', fee: 200 },
+  { city: 'Nakuru', fee: 200 },
+  { city: 'Eldoret', fee: 200 },
+  { city: 'Thika', fee: 200 },
+  { city: 'Kiambu', fee: 200 },
+  { city: 'Other (Rest of Kenya)', fee: 200 },
 ]
 
 const Preloader = () => (
@@ -120,7 +120,7 @@ const Checkout = () => {
   })
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
-  const shipping = deliveryMethod === 'pickup' ? 0 : (DELIVERY_LOCATIONS.find(l => l.city === formData.city)?.fee || 500)
+  const shipping = deliveryMethod === 'pickup' ? 0 : (DELIVERY_LOCATIONS.find(l => l.city === formData.city)?.fee || 200)
   const orderTotal = subtotal + shipping
   
   // Logic for amount to pay based on method and option

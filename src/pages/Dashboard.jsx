@@ -314,6 +314,22 @@ const Dashboard = () => {
                 </div>
                 <button className="mt-8 text-[10px] font-bold uppercase tracking-widest border-b border-gray-200 hover:border-primary transition-all pb-1">Edit Address</button>
               </div>
+              <div className="bg-white p-10 border border-gray-100 flex flex-col justify-between">
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary mb-8">Current Shipping Rates</h4>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-50">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nairobi</span>
+                      <span className="text-sm font-black text-primary">KSh 100</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-50">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Other Counties</span>
+                      <span className="text-sm font-black text-primary">KSh 200</span>
+                    </div>
+                  </div>
+                </div>
+                <Link to="/shipping-policy" className="mt-8 text-[10px] font-bold uppercase tracking-widest text-accent hover:text-primary transition-colors">View Full Shipping Policy</Link>
+              </div>
               <button className="border-2 border-dashed border-gray-100 p-10 flex flex-col items-center justify-center group hover:border-accent transition-colors">
                 <div className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors">
                   <Plus size={20} />

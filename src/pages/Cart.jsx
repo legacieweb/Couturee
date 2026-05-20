@@ -8,7 +8,7 @@ const Cart = () => {
   const navigate = useNavigate()
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
-  const shipping = cart.length > 0 ? 500 : 0
+  const shipping = cart.length > 0 ? 100 : 0
   const total = subtotal + shipping
 
   if (cart.length === 0) {
