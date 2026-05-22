@@ -37,49 +37,18 @@ export const products = [
     category: "Croptops",
     rating: 4.7
   },
-  {
-    id: 3,
-    name: "Sunset Knit Croptop",
-    price: 3800,
-    description: "Hand-knit croptop with a vibrant gradient, inspired by Nairobi sunsets.",
-    images: [
-      "https://images.unsplash.com/photo-1614676466623-f8d20c52406d?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1603400521630-9f2de124b33b?w=600&auto=format&fit=crop&q=60"
-    ],
-    variants: [
-      { id: 'v6', size: 'M', color: 'Sunset', stock: 5 },
-      { id: 'v7', size: 'L', color: 'Sunset', stock: 3 },
-    ],
-    category: "Croptops",
-    rating: 4.9
-  },
-  {
-    id: 4,
-    name: "Ivory Silk Croptop",
-    price: 5500,
-    description: "Luxury silk croptop with delicate lace trim, perfect for an elevated evening look.",
-    images: [
-      "https://images.unsplash.com/photo-1515347619252-60a4bdad8886?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?w=600&auto=format&fit=crop&q=60"
-    ],
-    variants: [
-      { id: 'v8', size: 'S', color: 'Ivory', stock: 6 },
-      { id: 'v9', size: 'M', color: 'Ivory', stock: 4 },
-    ],
-    category: "Croptops",
-    rating: 5.0
-  },
+
 
   // LEATHER JACKETS (4 products)
   {
     id: 5,
-    name: "Classic Biker Jacket",
-    price: 18500,
-    description: "Premium full-grain leather biker jacket with silver hardware and a quilted lining.",
+    name: " Bomber jacket",
+    price: 1500,
+    description: "Classic black leather bomber jacket with a modern twist, featuring a slightly cropped fit and silver hardware.",
     images: [
-      "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=600&auto=format&fit=crop&q=60"
+      "https://i.imgur.com/SJo3XUm.png",
+      "https://i.imgur.com/NGrZm70.png",
+      "https://i.imgur.com/BA0PBCE.png"
     ],
     variants: [
       { id: 'v10', size: 'M', color: 'Black', stock: 5 },
@@ -91,48 +60,50 @@ export const products = [
   },
   {
     id: 6,
-    name: "Cognac Leather Trench",
-    price: 24000,
-    description: "Elegant longline leather trench coat in a rich cognac shade, featuring a belted waist.",
+    name: "Satin jacket",
+    price: 1500,
+    description: "Luxurious cognac leather jacket with a sleek, minimalist design and a soft satin lining for added comfort.",
     images: [
-      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=600&auto=format&fit=crop&q=60"
+      "https://i.imgur.com/cVV3V4X.png",
+
+      "https://i.imgur.com/B7jrzec.png",
+      "https://i.imgur.com/rWTQIMd.png",
     ],
     variants: [
-      { id: 'v13', size: 'S', color: 'Cognac', stock: 4 },
-      { id: 'v14', size: 'M', color: 'Cognac', stock: 6 },
+      { id: 'v13', size: 'S', color: 'Blue', stock: 4 },
+      { id: 'v14', size: 'M', color: 'Blue', stock: 6 },
     ],
     category: "Leather Jackets",
     rating: 4.8
   },
   {
     id: 7,
-    name: "Midnight Suede Jacket",
-    price: 16500,
-    description: "Soft suede jacket in a deep midnight blue, featuring a minimalist collarless design.",
+    name: "PU leather coach ",
+    price: 1500,
+    description: "Edgy black PU leather coach jacket with a relaxed fit, snap button front, and contrast white stitching for a bold statement.",
     images: [
-      "https://images.unsplash.com/photo-1495105787522-5334e3ffa0ef?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1492447273231-0f8feaba1b3e?w=600&auto=format&fit=crop&q=60"
+      "https://i.imgur.com/WHCPwKc.png",
+      "https://i.imgur.com/CmRNeRP.png"
     ],
     variants: [
-      { id: 'v15', size: 'M', color: 'Midnight Blue', stock: 8 },
-      { id: 'v16', size: 'L', color: 'Midnight Blue', stock: 5 },
+      { id: 'v15', size: 'M', color: 'Black', stock: 8 },
+      { id: 'v16', size: 'L', color: 'Black', stock: 5 },
     ],
     category: "Leather Jackets",
     rating: 4.7
   },
   {
     id: 8,
-    name: "Emerald Cropped Moto",
-    price: 19800,
-    description: "Bold emerald green leather moto jacket with a cropped silhouette and asymmetrical zip.",
+    name: "Studio Tomboy faux ",
+    price: 1500,
+    description: "Trendy black faux leather bomber jacket with a slightly oversized fit, featuring ribbed cuffs and hem for a comfortable yet stylish look.",
     images: [
-      "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=600&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=60"
+      "https://i.imgur.com/MJk9iql.png",
+      "https://i.imgur.com/7iriyG4.png"
     ],
     variants: [
-      { id: 'v17', size: 'S', color: 'Emerald Green', stock: 3 },
-      { id: 'v18', size: 'M', color: 'Emerald Green', stock: 2 },
+      { id: 'v17', size: 'S', color: 'Black', stock: 3 },
+      { id: 'v18', size: 'M', color: 'Black', stock: 2 },
     ],
     category: "Leather Jackets",
     rating: 5.0
