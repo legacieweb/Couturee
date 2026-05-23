@@ -283,7 +283,9 @@ const Checkout = () => {
     return null
   }
 
-  const isFormValid = formData.name && formData.email && formData.address && formData.city && formData.phone;
+  const isFormValid = deliveryMethod === 'pickup' 
+    ? formData.name && formData.email && formData.phone 
+    : formData.name && formData.email && formData.address && formData.city && formData.phone;
 
   return (
     <div className="pt-40 pb-24 bg-white min-h-screen">
@@ -544,7 +546,7 @@ const Checkout = () => {
                     disabled
                     className="w-full h-20 bg-gray-100 text-gray-400 text-[10px] font-bold uppercase tracking-[0.4em] cursor-not-allowed flex items-center justify-center"
                   >
-                    Please fill all shipping details
+                    Please fill all required fields
                   </button>
                 )}
               </form>
