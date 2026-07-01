@@ -23,10 +23,10 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('shabil_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  const addToCart = (product, variant, quantity) => {
+  const addToCart = (product, variant, quantity, variantPrice, selectedColor) => {
     setCart(prevCart => {
       const existingItemIndex = prevCart.findIndex(
-        item => item.id === product.id && item.variantId === variant.id
+        item => item.id === product.id && item.variantId === variant.id && item.selectedColor === selectedColor
       );
 
       if (existingItemIndex > -1) {
@@ -35,12 +35,16 @@ export const CartProvider = ({ children }) => {
         return newCart;
       }
 
+      const sizes = variant.sizes ? variant.sizes.split(',').map(s => s.trim()) : []
+      const firstSize = sizes[0] || ''
+
       return [...prevCart, { 
         ...product, 
         variantId: variant.id, 
-        selectedSize: variant.size, 
-        selectedColor: variant.color, 
-        quantity 
+        selectedSize: firstSize, 
+        selectedColor: selectedColor, 
+        quantity,
+        price: variantPrice || variant.prices?.[0]
       }];
     });
   };

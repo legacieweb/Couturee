@@ -1,12 +1,12 @@
 export const categorySizeGuides = {
-  "Croptops": {
+  "Tops": {
     anatomy: [
       { l: 'The Bust', d: 'Measure around the fullest part of your chest, keeping the tape horizontal.', icon: '01' },
       { l: 'The Waist', d: 'Measure around your natural waistline, typically the narrowest part of your torso.', icon: '02' },
       { l: 'Underbust', d: 'Measure around your ribcage directly under your bust.', icon: '03' }
     ],
     chart: [
-      { s: 'Extra Small', c: 'XS', b: '80-84', w: '60-64', h: '32-34' }, // h here used as length or specific measure for tops
+      { s: 'Extra Small', c: 'XS', b: '80-84', w: '60-64', h: '32-34' },
       { s: 'Small', c: 'S', b: '84-88', w: '64-68', h: '34-36' },
       { s: 'Medium', c: 'M', b: '88-92', w: '68-72', h: '36-38' },
       { s: 'Large', c: 'L', b: '92-96', w: '72-76', h: '38-40' },
@@ -18,7 +18,7 @@ export const categorySizeGuides = {
       col3: 'Length (CM)'
     }
   },
-  "Leather Jackets": {
+  "Jackets": {
     anatomy: [
       { l: 'The Chest', d: 'Measure around the fullest part of the chest, under the arms.', icon: '01' },
       { l: 'Shoulders', d: 'Measure from one shoulder point to the other across the back.', icon: '02' },
@@ -36,7 +36,7 @@ export const categorySizeGuides = {
       col3: 'Sleeve (CM)'
     }
   },
-  "Leather Dress": {
+  "Dresses": {
     anatomy: [
       { l: 'The Bust', d: 'Measure around the fullest part of your chest.', icon: '01' },
       { l: 'The Waist', d: 'Measure around the narrowest part of your waist.', icon: '02' },
@@ -54,11 +54,11 @@ export const categorySizeGuides = {
       col3: 'Hips (CM)'
     }
   },
-  "Trousers": {
+  "Bottoms": {
     anatomy: [
-      { l: 'The Waist', d: 'Measure around where you want the trousers to sit.', icon: '01' },
+      { l: 'The Waist', d: 'Measure around where you want the bottoms to sit.', icon: '01' },
       { l: 'The Hips', d: 'Measure around the fullest part of your seat.', icon: '02' },
-      { l: 'Inseam', d: 'Measure from the crotch to the desired length of the trousers.', icon: '03' }
+      { l: 'Inseam', d: 'Measure from the crotch to the desired length.', icon: '03' }
     ],
     chart: [
       { s: 'Small', c: 'S', b: '70-74', w: '92-96', h: '78-80' },
@@ -71,7 +71,7 @@ export const categorySizeGuides = {
       col3: 'Inseam (CM)'
     }
   },
-  "Sweatpants": {
+  "Handbags": {
     anatomy: [
       { l: 'The Waist', d: 'Measure around your natural waistline.', icon: '01' },
       { l: 'The Hips', d: 'Measure around the fullest part of your hips.', icon: '02' },
@@ -90,3 +90,4 @@ export const categorySizeGuides = {
     }
   }
 };
+

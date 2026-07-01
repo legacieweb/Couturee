@@ -115,7 +115,7 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { label: 'Total Spent', value: `KSh ${orders.reduce((acc, o) => acc + Number(o.total), 0).toLocaleString()}`, icon: DollarSign },
+                { label: 'Total Spent', value: `$ ${orders.reduce((acc, o) => acc + Number(o.total), 0).toLocaleString()}`, icon: DollarSign },
                 { label: 'Active Orders', value: orders.filter(o => o.status !== 'Delivered').length, icon: Package },
                 { label: 'Wishlist Pieces', value: wishlist.length, icon: Heart },
               ].map((stat, i) => (
@@ -186,15 +186,15 @@ const Dashboard = () => {
                                 {order.status || 'Processing'}
                               </span>
                               {order.balance_due > 0 && (
-                                <span className="text-[7px] font-bold uppercase text-orange-500">Balance Due: KSh {order.balance_due.toLocaleString()}</span>
+                                <span className="text-[7px] font-bold uppercase text-orange-500">Balance Due: $ {order.balance_due.toLocaleString()}</span>
                               )}
                             </div>
                           </td>
                           <td className="p-8">
-                            <div className="flex flex-col">
-                              <span className="font-black text-primary">KSh {order.total.toLocaleString()}</span>
-                              <span className="text-[7px] font-bold text-gray-400 uppercase">Paid: KSh {order.amount_paid?.toLocaleString()}</span>
-                            </div>
+<div className="flex flex-col">
+                               <span className="font-black text-primary">$ {order.total.toLocaleString()}</span>
+                               <span className="text-[7px] font-bold text-gray-400 uppercase">Paid: $ {order.amount_paid?.toLocaleString()}</span>
+                             </div>
                           </td>
                           <td className="p-8 text-right">
                             <button className="text-[10px] font-bold uppercase tracking-widest text-accent border-b border-accent pb-1 text-nowrap">Track Piece</button>
@@ -280,7 +280,7 @@ const Dashboard = () => {
                   <div className="flex-grow">
                     <p className="text-[8px] font-bold uppercase tracking-[0.4em] text-accent mb-2">{item.category}</p>
                     <h4 className="text-xl font-black elegant-font text-primary uppercase leading-none mb-4">{item.name}</h4>
-                    <p className="text-sm font-bold text-primary mb-4">KSh {item.price.toLocaleString()}</p>
+                    <p className="text-sm font-bold text-primary mb-4">$ {item.variants[0]?.prices?.[0]?.toLocaleString() || 'N/A'}</p>
                     <button className="text-[10px] font-bold uppercase tracking-widest border border-primary px-4 py-2 hover:bg-primary hover:text-white transition-all">Move to Bag</button>
                   </div>
                 </div>
@@ -317,16 +317,16 @@ const Dashboard = () => {
               <div className="bg-white p-10 border border-gray-100 flex flex-col justify-between">
                 <div>
                   <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary mb-8">Current Shipping Rates</h4>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center pb-2 border-b border-gray-50">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nairobi</span>
-                      <span className="text-sm font-black text-primary">KSh 100</span>
-                    </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-gray-50">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Other Counties</span>
-                      <span className="text-sm font-black text-primary">KSh 200</span>
-                    </div>
-                  </div>
+<div className="space-y-4">
+                     <div className="flex justify-between items-center pb-2 border-b border-gray-50">
+                       <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nairobi</span>
+                       <span className="text-sm font-black text-primary">$ 5</span>
+                     </div>
+                     <div className="flex justify-between items-center pb-2 border-b border-gray-50">
+                       <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Other Counties</span>
+                       <span className="text-sm font-black text-primary">$ 10</span>
+                     </div>
+                   </div>
                 </div>
                 <Link to="/shipping-policy" className="mt-8 text-[10px] font-bold uppercase tracking-widest text-accent hover:text-primary transition-colors">View Full Shipping Policy</Link>
               </div>

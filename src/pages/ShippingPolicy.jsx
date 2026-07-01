@@ -23,10 +23,10 @@ const ShippingPolicy = () => {
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Shipping Rates</h2>
             <p>Our standard delivery rates within Kenya are as follows:</p>
-            <ul className="list-disc pl-6 mt-4 space-y-2">
-              <li><strong>Nairobi:</strong> KES 100</li>
-              <li><strong>Other Counties:</strong> KES 200</li>
-            </ul>
+<ul className="list-disc pl-6 mt-4 space-y-2">
+               <li><strong>Nairobi:</strong> $5</li>
+               <li><strong>Other Counties:</strong> $10</li>
+             </ul>
             <p className="mt-4">Rates are applied at checkout based on your selected delivery location.</p>
           </section>
 

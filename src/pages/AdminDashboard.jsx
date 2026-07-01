@@ -121,7 +121,7 @@ const AdminDashboard = () => {
   const stats = [
     { 
       label: 'Total Revenue', 
-      value: `KSh ${(Array.isArray(orders) ? orders.reduce((acc, o) => acc + Number(o.total || 0), 0) / 1000 : 0).toFixed(1)}K`, 
+      value: `$ ${(Array.isArray(orders) ? orders.reduce((acc, o) => acc + Number(o.total || 0), 0) / 1000 : 0).toFixed(1)}K`, 
       trend: '+12.5%', 
       icon: DollarSign, 
       positive: true 
@@ -208,7 +208,7 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-black text-primary">KSh {order.total?.toLocaleString()}</p>
+                        <p className="text-sm font-black text-primary">$ {order.total?.toLocaleString()}</p>
                         <p className="text-[8px] font-bold uppercase tracking-widest text-accent">{order.status}</p>
                       </div>
                     </div>
@@ -308,7 +308,7 @@ const AdminDashboard = () => {
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{product.category}</span>
                           </td>
                           <td className="p-8">
-                            <span className="text-sm font-black text-primary">KSh {product.price?.toLocaleString()}</span>
+                            <span className="text-sm font-black text-primary">$ {product.variants[0]?.prices?.[0]?.toLocaleString() || 'N/A'}</span>
                           </td>
                           <td className="p-8">
                             <div className="flex flex-col">
@@ -432,9 +432,9 @@ const AdminDashboard = () => {
                                   {order.payment_option === 'delivery_only' ? 'Partial Payment' : 'Full Payment'}
                                 </span>
                                 {order.payment_option === 'delivery_only' && (
-                                  <span className="text-[8px] font-bold uppercase text-orange-500 tracking-tighter ml-3.5">
-                                    Balance Due: KSh {order.balance_due?.toLocaleString()}
-                                  </span>
+<span className="text-[8px] font-bold uppercase text-orange-500 tracking-tighter ml-3.5">
+                                     Balance Due: $ {order.balance_due?.toLocaleString()}
+                                   </span>
                                 )}
                               </div>
                             </div>
@@ -442,11 +442,11 @@ const AdminDashboard = () => {
                           <td className="p-8">
                             <div className="flex flex-col">
                               <div className="flex items-baseline space-x-1">
-                                <span className="text-[10px] font-bold text-gray-400 uppercase">KSh</span>
+                                <span className="text-[10px] font-bold text-gray-400 uppercase">$</span>
                                 <span className="text-lg font-black text-primary leading-none">{order.total?.toLocaleString()}</span>
                               </div>
                               <div className="flex flex-col mt-2 space-y-0.5">
-                                <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Deposit: KSh {order.amount_paid?.toLocaleString()}</span>
+                                <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Deposit: $ {order.amount_paid?.toLocaleString()}</span>
                                 <span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Method: {order.payment_method || 'M-PESA'}</span>
                               </div>
                             </div>
@@ -556,7 +556,7 @@ const AdminDashboard = () => {
                           </td>
                           <td className="p-8">
                             <div className="flex items-baseline space-x-1">
-                              <span className="text-[10px] font-bold text-gray-400 uppercase">KSh</span>
+                              <span className="text-[10px] font-bold text-gray-400 uppercase">$</span>
                               <span className="text-lg font-black text-primary leading-none">{customer.totalSpent?.toLocaleString() || '0'}</span>
                             </div>
                           </td>
@@ -714,11 +714,14 @@ const AdminDashboard = () => {
               <form onSubmit={handleInventoryUpdate} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Base Price (KSh)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Base Price ($)</label>
                     <input 
                       type="number" 
-                      value={editingProduct.price}
-                      onChange={(e) => setEditingProduct({...editingProduct, price: parseInt(e.target.value)})}
+                      value={editingProduct.variants?.[0]?.prices?.[0] || ''}
+                      onChange={(e) => setEditingProduct({
+                        ...editingProduct, 
+                        variants: editingProduct.variants?.map((v, i) => i === 0 ? {...v, prices: [parseInt(e.target.value), ...v.prices.slice(1)]} : v) || []
+                      })}
                       className="w-full border-b border-gray-100 py-3 text-sm font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
@@ -740,11 +743,18 @@ const AdminDashboard = () => {
                     onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}
                     className="w-full border-b border-gray-100 py-3 text-sm font-bold focus:outline-none focus:border-accent bg-transparent"
                   >
-                    <option value="Croptops">Croptops</option>
-                    <option value="Leather Jackets">Leather Jackets</option>
-                    <option value="Leather Dress">Leather Dress</option>
-                    <option value="Trousers">Trousers</option>
-                    <option value="Sweatpants">Sweatpants</option>
+                    <option value="Tops">Tops</option>
+                    <option value="Jackets">Jackets</option>
+                    <option value="Dresses">Dresses</option>
+                    <option value="Bottoms">Bottoms</option>
+                    <option value="Handbags">Handbags</option>
+                    <option value="Hoodies">Hoodies</option>
+                    <option value="Sets">Sets</option>
+                    <option value="Underwear">Underwear</option>
+                    <option value="T-Shirts">T-Shirts</option>
+                    <option value="Pajamas">Pajamas</option>
+                    <option value="Shirts">Shirts</option>
+                    <option value="Hats & Caps">Hats & Caps</option>
                   </select>
                 </div>
 

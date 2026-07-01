@@ -15,9 +15,10 @@ CREATE TABLE IF NOT EXISTS products (
     price DECIMAL(10, 2) NOT NULL,
     description TEXT,
     category VARCHAR(100),
+    gender VARCHAR(10),
     rating DECIMAL(2, 1),
-    images TEXT[], -- Array of image URLs
-    variants JSONB, -- Store variants as JSON
+    images TEXT[],
+    variants JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

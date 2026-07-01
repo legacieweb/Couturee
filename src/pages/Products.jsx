@@ -4,17 +4,27 @@ import { products as localProducts } from '../data/products'
 import { api } from '../utils/api'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, X, Search, ChevronRight, Loader2 } from 'lucide-react'
+import { categories } from '../components/CollectionsNavBar'
 
-const Products = ({ forcedCategory }) => {
+const getPriceRange = (variants) => {
+  const allPrices = variants.flatMap(v => v.prices || [])
+  if (allPrices.length === 0) return 'Price on request'
+  const min = Math.min(...allPrices)
+  const max = Math.max(...allPrices)
+  return min === max ? `$${min.toLocaleString()}` : `$${min.toLocaleString()} - $${max.toLocaleString()}`
+}
+
+const Products = ({ forcedCategory, showCollectionsNav }) => {
   const location = useLocation()
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
-  const [category, setCategory] = useState(forcedCategory || 'All')
+  const [gender, setGender] = useState('All')
+  const [categoryFilter, setCategoryFilter] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const categories = ['All', 'Croptops', 'Leather Jackets', 'Leather Dress', 'Trousers', 'Sweatpants']
+  const genders = ['All', 'Male', 'Female']
 
   useEffect(() => {
     setProducts(localProducts)
@@ -22,21 +32,36 @@ const Products = ({ forcedCategory }) => {
   }, [])
 
   useEffect(() => {
-    if (forcedCategory) {
-      setCategory(forcedCategory)
-      return
-    }
     const params = new URLSearchParams(location.search)
-    const catParam = params.get('category')
+    const genderParam = params.get('gender')
     const searchParam = params.get('search')
-    setCategory(catParam || 'All')
+    const categoryParam = params.get('category')
+    setGender(genderParam ? genderParam.charAt(0).toUpperCase() + genderParam.slice(1).toLowerCase() : 'All')
     if (searchParam) setSearchQuery(searchParam)
     else setSearchQuery('')
-  }, [location, forcedCategory])
+    if (categoryParam) setCategoryFilter(categoryParam)
+    else setCategoryFilter(null)
+  }, [location])
 
   useEffect(() => {
     let result = products
-    if (category !== 'All') result = result.filter(p => p.category === category)
+    const activeFilter = forcedCategory || categoryFilter
+    if (activeFilter && activeFilter !== 'All') {
+      result = result.filter(p => {
+        const productCategory = p.category.toLowerCase()
+        const filterCategory = activeFilter.toLowerCase()
+        if (filterCategory === 'underwear') return productCategory === 'underwear' || productCategory === 'undergarments'
+        if (filterCategory === 'shirts-tshirts') return productCategory === 'shirts' || productCategory === 't-shirts' || productCategory === 'tops'
+        if (filterCategory === 'sets') return productCategory === 'sets'
+        if (filterCategory === 'jumpsuits') return productCategory === 'jumpsuits'
+        if (filterCategory === 'pajamas') return productCategory === 'pajamas' || productCategory === 'loungewear'
+        if (filterCategory === 'hoodies-pullovers') return productCategory === 'hoodies' || productCategory === 'pullovers' || productCategory === 'sweatshirts'
+        if (filterCategory === 'hats-caps') return productCategory === 'hats' || productCategory === 'caps' || productCategory === 'headwear'
+        if (filterCategory === 'accessories') return productCategory === 'accessories' || productCategory === 'bags'
+        return productCategory === filterCategory
+      })
+    }
+    if (gender !== 'All') result = result.filter(p => p.gender && p.gender.toLowerCase() === gender.toLowerCase())
     if (searchQuery) {
       result = result.filter(p => 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -44,10 +69,10 @@ const Products = ({ forcedCategory }) => {
       )
     }
     setFilteredProducts(result)
-  }, [category, searchQuery, products])
+  }, [gender, searchQuery, products, forcedCategory, categoryFilter])
 
   return (
-    <div className="pt-40 min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-40">
       {/* Editorial Header */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-12 mb-16">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12">
@@ -59,15 +84,15 @@ const Products = ({ forcedCategory }) => {
             >
               Collection Archives
             </motion.span>
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              key={category}
-              className="text-6xl md:text-8xl lg:text-[10vw] font-black elegant-font tracking-tighter leading-[0.8] uppercase"
-            >
-              {category === 'All' ? 'Signature' : category.split(' ')[0]} <br/>
-              <span className="italic font-normal serif lowercase ml-[10vw]">{category === 'All' ? 'Pieces' : category.split(' ')[1] || 'Collection'}</span>
-            </motion.h1>
+<motion.h1 
+               initial={{ opacity: 0, y: 30 }}
+               animate={{ opacity: 1, y: 0 }}
+               key={gender}
+               className="text-6xl md:text-8xl lg:text-[10vw] font-black elegant-font tracking-tighter leading-[0.8] uppercase"
+             >
+               {gender === 'All' ? 'Signature' : gender} <br/>
+               <span className="italic font-normal serif lowercase ml-[10vw]">{gender === 'All' ? 'Pieces' : 'Collection'}</span>
+             </motion.h1>
           </div>
           <div className="flex items-center space-x-12">
             <div className="hidden md:block text-right">
@@ -95,20 +120,20 @@ const Products = ({ forcedCategory }) => {
             className="overflow-hidden border-b border-gray-100 bg-gray-50/50"
           >
             <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-3 gap-20">
-              <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Category</h3>
-                <div className="flex flex-col space-y-4">
-                  {categories.map(cat => (
-                    <button 
-                      key={cat}
-                      onClick={() => setCategory(cat)}
-                      className={`text-2xl font-black elegant-font text-left hover:text-accent transition-colors ${category === cat ? 'text-primary' : 'text-gray-300'}`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
+<div>
+                 <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Gender</h3>
+                 <div className="flex flex-col space-y-4">
+                   {genders.map(g => (
+                     <button 
+                       key={g}
+                       onClick={() => setGender(g)}
+                       className={`text-2xl font-black elegant-font text-left hover:text-accent transition-colors ${gender === g ? 'text-primary' : 'text-gray-300'}`}
+                     >
+                       {g}
+                     </button>
+                   ))}
+                 </div>
+               </div>
               <div>
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Sort By</h3>
                 <div className="flex flex-col space-y-4 text-2xl font-black elegant-font text-gray-300">
@@ -135,6 +160,52 @@ const Products = ({ forcedCategory }) => {
         )}
       </AnimatePresence>
 
+      {/* Collections Navigation */}
+      {showCollectionsNav && (
+        <div className="bg-white border-b border-gray-100">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+            <div className="lg:hidden h-16 overflow-x-auto overflow-y-hidden">
+              <div className="flex items-center space-x-6 h-16 min-w-max">
+                <Link
+                  to="/collections"
+                  className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent whitespace-nowrap"
+                >
+                  All
+                </Link>
+                {categories.map((category) => (
+                  <Link
+                    key={category.slug}
+                    to={`/collections?category=${category.slug}`}
+                    className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent whitespace-nowrap"
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="hidden lg:flex items-center justify-center h-20">
+              <div className="flex items-center space-x-12">
+                <Link
+                  to="/collections"
+                  className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent"
+                >
+                  All Collections
+                </Link>
+                {categories.map((category) => (
+                  <Link
+                    key={category.slug}
+                    to={`/collections?category=${category.slug}`}
+                    className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent"
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Product Grid - Lookbook Style */}
       <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-24">
         {loading ? (
@@ -153,7 +224,7 @@ const Products = ({ forcedCategory }) => {
                 className="group"
               >
                 <Link to={`/product/${product.id}`}>
-                  <div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-50 group-hover:shadow-2xl transition-all duration-700">
+<div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-50 group-hover:shadow-2xl transition-all duration-700">
                     <img 
                       src={product.images[0]} 
                       alt={product.name} 
@@ -165,6 +236,14 @@ const Products = ({ forcedCategory }) => {
                         className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.4em] text-primary/40 group-hover:text-accent transition-colors duration-500"
                       >
                         {product.category}
+                      </motion.p>
+                    </div>
+                    {/* Gender Label */}
+                    <div className="absolute top-0 right-0 p-4 md:p-6 overflow-hidden">
+                      <motion.p 
+                        className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.4em] text-primary/40 group-hover:text-accent transition-colors duration-500"
+                      >
+                        {product.gender}
                       </motion.p>
                     </div>
                     
@@ -180,9 +259,9 @@ const Products = ({ forcedCategory }) => {
                     </div>
                     
                     <div className="flex items-center space-x-4">
-                      <span className="text-[10px] md:text-xs font-bold text-gray-400 tracking-widest">
-                        KSh {product.price.toLocaleString()}
-                      </span>
+<span className="text-[10px] md:text-xs font-bold text-gray-400 tracking-widest">
+                          {getPriceRange(product.variants)}
+                        </span>
                       <div className="flex-grow h-[1px] bg-gray-100 group-hover:bg-accent/30 transition-colors duration-700" />
                     </div>
                   </div>
@@ -193,7 +272,7 @@ const Products = ({ forcedCategory }) => {
         ) : (
           <div className="py-32 text-center">
             <h2 className="text-4xl font-black elegant-font text-gray-200 uppercase mb-8">No pieces found</h2>
-            <button onClick={() => {setCategory('All'); setSearchQuery('')}} className="text-[10px] font-bold uppercase tracking-[0.3em] border-b-2 border-accent pb-2">Reset Collection</button>
+            <button onClick={() => {setGender('All'); setSearchQuery('')}} className="text-[10px] font-bold uppercase tracking-[0.3em] border-b-2 border-accent pb-2">Reset Collection</button>
           </div>
         )}
       </div>

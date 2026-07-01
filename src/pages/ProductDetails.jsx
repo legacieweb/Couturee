@@ -14,10 +14,26 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
+  const [selectedVariant, setSelectedVariant] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false)
   const [activeAccordion, setActiveAccordion] = useState('details')
   const [addedToCart, setAddedToCart] = useState(false)
+
+useEffect(() => {
+    const foundProduct = products.find(p => p.id === parseInt(id))
+    if (foundProduct) {
+      setProduct(foundProduct)
+      if (foundProduct.variants.length > 0) {
+        const firstVariant = foundProduct.variants[0]
+        const firstSizes = firstVariant.sizes.split(',').map(s => s.trim())
+        setSelectedSize(firstSizes[0])
+        setSelectedColor(firstVariant.color)
+        setSelectedVariant(firstVariant)
+        setSelectedImage(firstVariant.imageIndex !== undefined ? firstVariant.imageIndex : 0)
+      }
+    }
+  }, [id])
 
   const nextImage = () => {
     setSelectedImage((prev) => (prev + 1) % product.images.length)
@@ -27,27 +43,22 @@ const ProductDetails = () => {
     setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length)
   }
 
-  useEffect(() => {
-    const foundProduct = products.find(p => p.id === parseInt(id))
-    if (foundProduct) {
-      setProduct(foundProduct)
-      if (foundProduct.variants.length > 0) {
-        setSelectedSize(foundProduct.variants[0].size)
-        setSelectedColor(foundProduct.variants[0].color)
-      }
-    }
-  }, [id])
+if (!product) return null
 
-  if (!product) return null
-
-  const currentSizeGuide = categorySizeGuides[product.category] || categorySizeGuides["Leather Dress"]
-  const currentVariant = product.variants.find(v => v.size === selectedSize && v.color === selectedColor)
-  const inStock = currentVariant ? currentVariant.stock > 0 : false
+  // Get sizes available for the selected color
+  const sizesForSelectedColor = selectedColor 
+    ? product.variants.find(v => v.color === selectedColor)?.sizes.split(',').map(s => s.trim()).filter(Boolean) || []
+    : []
+  const currentSizeGuide = categorySizeGuides[product.category] || categorySizeGuides["Dresses"]
+  const currentVariant = product.variants.find(v => v.color === selectedColor && v.sizes.split(',').map(s => s.trim()).includes(selectedSize))
+  const sizeIndex = currentVariant?.sizes.split(',').map(s => s.trim()).indexOf(selectedSize) ?? -1
+  const inStock = currentVariant ? currentVariant.stocks[sizeIndex] > 0 : false
+  const currentPrice = currentVariant ? currentVariant.prices[sizeIndex] : product.variants[0]?.prices[0]
   const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3)
 
   const handleAddToCart = () => {
     if (inStock && currentVariant) {
-      addToCart(product, currentVariant, quantity);
+      addToCart(product, currentVariant, quantity, currentPrice, selectedColor);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 3000);
     }
@@ -55,7 +66,7 @@ const ProductDetails = () => {
 
   const handleBuyNow = () => {
     if (inStock && currentVariant) {
-      addToCart(product, currentVariant, quantity);
+      addToCart(product, currentVariant, quantity, currentPrice, selectedColor);
       navigate('/checkout');
     }
   };
@@ -66,8 +77,8 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
           
           {/* Left: Image Carousel */}
-          <div className="lg:col-span-7 space-y-8">
-            <div className="relative aspect-[3/4] bg-gray-50 overflow-hidden group">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="relative aspect-[4/5] bg-gray-50 overflow-hidden group">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={selectedImage}
@@ -84,19 +95,19 @@ const ProductDetails = () => {
               {/* Navigation Arrows */}
               <button 
                 onClick={prevImage}
-                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 border border-white/20 backdrop-blur-md flex items-center justify-center rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-primary"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 border border-white/20 backdrop-blur-md flex items-center justify-center rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-primary"
               >
-                <ChevronLeft size={24} />
+                <ChevronLeft size={20} />
               </button>
               <button 
                 onClick={nextImage}
-                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 border border-white/20 backdrop-blur-md flex items-center justify-center rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-primary"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 border border-white/20 backdrop-blur-md flex items-center justify-center rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-primary"
               >
-                <ChevronRight size={24} />
+                <ChevronRight size={20} />
               </button>
 
               {/* Progress Bar */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10">
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white/10">
                 <motion.div 
                   className="h-full bg-accent"
                   initial={{ width: 0 }}
@@ -106,7 +117,7 @@ const ProductDetails = () => {
             </div>
 
             {/* Thumbnails */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {product.images.map((img, idx) => (
                 <button 
                   key={idx}
@@ -120,8 +131,8 @@ const ProductDetails = () => {
           </div>
 
           {/* Right: Product Info (Sticky) */}
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-32 space-y-12">
+          <div className="lg:col-span-7">
+            <div className="lg:sticky lg:top-32 space-y-10">
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div>
@@ -133,10 +144,10 @@ const ProductDetails = () => {
                   </button>
                 </div>
                 
-                <div className="flex items-end space-x-4 mb-8">
-                  <p className="text-3xl font-black elegant-font">KSh {product.price.toLocaleString()}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 pb-1">VAT Included</p>
-                </div>
+<div className="flex items-end space-x-4 mb-8">
+                    <p className="text-3xl font-black elegant-font">$ {currentPrice?.toLocaleString()}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 pb-1">USD</p>
+                  </div>
 
                 <div className="p-6 bg-gray-50 border-l-2 border-accent mb-10">
                   <p className="text-sm italic text-gray-600 leading-relaxed font-serif">
@@ -148,40 +159,72 @@ const ProductDetails = () => {
 
               {/* Selection Logic */}
               <div className="space-y-10">
-                {/* Colors */}
-                <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6">Palette Selection</h3>
-                  <div className="flex flex-wrap gap-3">
-                    {[...new Set(product.variants.map(v => v.color))].map(color => (
-                      <button 
-                        key={color}
-                        onClick={() => setSelectedColor(color)}
-                        className={`px-8 py-4 text-[10px] font-bold uppercase tracking-widest transition-all ${selectedColor === color ? 'bg-primary text-white scale-105 shadow-xl' : 'border border-gray-100 hover:border-primary'}`}
-                      >
-                        {color}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Sizes */}
                 <div>
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">Size Selection</h3>
                     <button onClick={() => setIsSizeGuideOpen(true)} className="text-[10px] font-bold uppercase tracking-widest text-accent border-b border-accent pb-1">Size Guide</button>
                   </div>
-                  <div className="flex flex-wrap gap-4">
-                    {[...new Set(product.variants.map(v => v.size))].map(size => (
-                      <button 
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`h-14 w-14 flex items-center justify-center text-xs font-bold transition-all ${selectedSize === size ? 'bg-primary text-white scale-110 shadow-lg' : 'border border-gray-100 hover:border-primary'}`}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+<div className="flex flex-wrap gap-4">
+                      {sizesForSelectedColor.map(size => {
+                        const variantForStock = product.variants.find(v => 
+                          v.color === selectedColor && 
+                          v.sizes.split(',').map(s => s.trim()).includes(size)
+                        )
+                        const sizeIdx = variantForStock?.sizes.split(',').map(s => s.trim()).indexOf(size) ?? -1
+                        const isAvailable = variantForStock && variantForStock.stocks[sizeIdx] > 0
+                        return (
+                          <button 
+                            key={size}
+                            onClick={() => {
+                              if (!isAvailable) return
+                              setSelectedSize(size)
+                              const variant = product.variants.find(v => 
+                                v.color === selectedColor && 
+                                v.sizes.split(',').map(s => s.trim()).includes(size)
+                              )
+                              if (variant) {
+                                const sizeIndex = variant.sizes.split(',').map(s => s.trim()).indexOf(size)
+                                setSelectedVariant(variant)
+                                if (variant.imageIndex !== undefined) setSelectedImage(variant.imageIndex)
+                              }
+                            }}
+                            className={`h-14 w-14 flex items-center justify-center text-xs font-bold transition-all ${selectedSize === size ? 'bg-primary text-white scale-110 shadow-lg' : isAvailable ? 'border border-gray-100 hover:border-primary cursor-pointer' : 'border border-gray-100 opacity-30 cursor-not-allowed'}`}
+                          >
+                            {size}
+                          </button>
+                        )
+                      })}
+                    </div>
+                 </div>
+
+                  {/* Colors for selected size */}
+                  <div>
+                    <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6">Palette Selection</h3>
+<div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      {[...new Set(product.variants.map(v => v.color))].map((color, idx, arr) => (
+                        <React.Fragment key={color}>
+                          <button
+                            onClick={() => {
+                              setSelectedColor(color)
+                              const variant = product.variants.find(v => v.color === color)
+                              if (variant) {
+                                const sizes = variant.sizes.split(',').map(s => s.trim())
+                                const firstSize = sizes[0] || ''
+                                if (firstSize) setSelectedSize(firstSize)
+                                setSelectedVariant(variant)
+                                if (variant.imageIndex !== undefined) setSelectedImage(variant.imageIndex)
+                              }
+                            }}
+                            className={`text-xs font-bold uppercase tracking-widest transition-all ${selectedColor === color ? 'text-primary scale-105' : 'text-gray-400 hover:text-primary'}`}
+                          >
+                            {color}
+                          </button>
+                          {idx < arr.length - 1 && <span className="text-gray-300 text-xs">,</span>}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                 </div>
 
                 {/* Actions */}
                   <div className="flex flex-col space-y-4 pt-6">
@@ -288,7 +331,7 @@ const ProductDetails = () => {
                   <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" />
                 </div>
                 <h3 className="text-xl font-black elegant-font uppercase group-hover:text-accent transition-colors">{p.name}</h3>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-2">KSh {p.price.toLocaleString()}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-2">$ {p.variants[0]?.prices?.[0]?.toLocaleString() || 'N/A'}</p>
               </Link>
             ))}
           </div>

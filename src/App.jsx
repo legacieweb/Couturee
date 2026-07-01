@@ -75,26 +75,18 @@ const Navbar = () => {
               <button onClick={() => setIsOpen(true)} className="lg:hidden p-2 -ml-2">
                 <Menu size={20} strokeWidth={1.5} />
               </button>
-              <div className="hidden lg:flex items-center space-x-10">
+<div className="hidden lg:flex items-center space-x-10">
                 <Link to="/products" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Shop</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Shop</span>
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">All</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">All</span>
                 </Link>
-                <Link to="/products?category=Croptops" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Croptops</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Croptops</span>
+                <Link to="/products?gender=male" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Male</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Male</span>
                 </Link>
-                <Link to="/products?category=Leather Jackets" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Leather</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Leather</span>
-                </Link>
-                <Link to="/products?category=Leather Dress" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Dresses</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Dresses</span>
-                </Link>
-                <Link to="/products?category=Trousers" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Trousers</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Trousers</span>
+                <Link to="/products?gender=female" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Female</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Female</span>
                 </Link>
               </div>
             </div>
@@ -164,17 +156,17 @@ const Navbar = () => {
                 <X size={32} strokeWidth={1} />
               </button>
             </div>
-            <div className="flex-grow flex flex-col items-center justify-center space-y-8">
-              {['Home', 'Shop', 'Croptops', 'Leather Jackets', 'Leather Dress', 'Trousers', 'Sweatpants'].map((item, i) => (
-                <Link 
-                  key={item} 
-                  to={item === 'Home' ? '/' : item === 'Shop' ? '/products' : `/products?category=${item}`}
-                  className="text-4xl md:text-6xl font-black elegant-font hover:text-accent transition-colors uppercase tracking-tighter"
-                >
-                  {item}
-                </Link>
-              ))}
-            </div>
+<div className="flex-grow flex flex-col items-center justify-center space-y-8">
+{['Home', 'All', 'Male', 'Female'].map((item, i) => (
+                  <Link 
+                    key={item} 
+                    to={item === 'Home' ? '/' : item === 'All' ? '/products' : `/products?gender=${item.toLowerCase()}`}
+                    className="text-4xl md:text-6xl font-black elegant-font hover:text-accent transition-colors uppercase tracking-tighter"
+                  >
+                    {item}
+                  </Link>
+                ))}
+             </div>
             <div className="p-12 flex justify-center space-x-8 border-t border-gray-100">
               <a href="https://www.instagram.com/shabil/" target="_blank" rel="noopener noreferrer">
                 <Instagram size={20} className="text-gray-400 hover:text-accent transition-colors" />
@@ -311,23 +303,20 @@ const Footer = () => (
           <div className="space-y-12">
             <div>
               <h3 className="text-[11px] font-black uppercase tracking-[0.6em] text-accent mb-10">The Collections</h3>
-              <ul className="space-y-8">
-                {[
-                  { name: 'All Pieces', path: '/products' },
-                  { name: 'Croptops', path: '/products?category=Croptops' },
-                  { name: 'Leather Jackets', path: '/products?category=Leather Jackets' },
-                  { name: 'Leather Dress', path: '/products?category=Leather Dress' },
-                  { name: 'Trousers', path: '/products?category=Trousers' },
-                  { name: 'Sweatpants', path: '/products?category=Sweatpants' }
-                ].map(link => (
-                  <li key={link.name}>
-                    <Link to={link.path} className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] hover:text-white transition-all group flex items-center">
-                      <span className="w-0 group-hover:w-8 h-[1px] bg-accent transition-all duration-300 mr-0 group-hover:mr-4" />
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+<ul className="space-y-8">
+                 {[
+                   { name: 'All Pieces', path: '/products' },
+                   { name: 'Male', path: '/products?gender=male' },
+                   { name: 'Female', path: '/products?gender=female' }
+                 ].map(link => (
+                   <li key={link.name}>
+                     <Link to={link.path} className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] hover:text-white transition-all group flex items-center">
+                       <span className="w-0 group-hover:w-8 h-[1px] bg-accent transition-all duration-300 mr-0 group-hover:mr-4" />
+                       {link.name}
+                     </Link>
+                   </li>
+                 ))}
+               </ul>
             </div>
             <div>
               <h3 className="text-[11px] font-black uppercase tracking-[0.6em] text-accent mb-10">The Maison</h3>
@@ -432,8 +421,9 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/new-arrivals" element={<Collection title="New Arrivals" description="The Latest Creations" category="All" />} />
+<Route path="/products" element={<Products />} />
+               <Route path="/collections" element={<Products showCollectionsNav={true} />} />
+               <Route path="/new-arrivals" element={<Collection title="New Arrivals" description="The Latest Creations" category="All" />} />
               <Route path="/gala-edit" element={<Collection title="Gala Edit" description="The Art of the Evening" category="Gala" />} />
               <Route path="/evening-luxe" element={<Collection title="Evening Luxe" description="Nighttime Sophistication" category="Evening" />} />
               

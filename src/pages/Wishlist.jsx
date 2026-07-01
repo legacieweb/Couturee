@@ -8,10 +8,11 @@ const Wishlist = () => {
   const { wishlist, toggleWishlist, addToCart } = useCart()
 
   const handleMoveToBag = (product) => {
-    // Default to first variant for quick move
     if (product.variants && product.variants.length > 0) {
-      addToCart(product, product.variants[0], 1)
-      toggleWishlist(product) // Remove from wishlist after adding to bag
+      const firstVariant = product.variants[0]
+      const firstSize = firstVariant.sizes.split(',')[0]?.trim()
+      addToCart(product, firstVariant, 1, firstVariant.prices[0], firstVariant.color)
+      toggleWishlist(product)
     }
   }
 
@@ -85,7 +86,7 @@ const Wishlist = () => {
                     <Link to={`/product/${product.id}`}>
                       <h3 className="text-3xl font-black elegant-font tracking-tighter leading-none group-hover:text-accent transition-colors uppercase">{product.name}</h3>
                     </Link>
-                    <p className="text-sm font-bold mt-3 italic font-serif">KSh {product.price.toLocaleString()}</p>
+                    <p className="text-sm font-bold mt-3 italic font-serif">$ {product.variants[0]?.prices?.[0]?.toLocaleString() || 'N/A'}</p>
                   </div>
                   <Link 
                     to={`/product/${product.id}`}

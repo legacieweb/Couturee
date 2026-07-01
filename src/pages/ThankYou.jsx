@@ -46,7 +46,7 @@ const ThankYou = () => {
             </div>
             <div className="text-center md:text-left md:pl-12">
               <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Estimated Delivery</p>
-              <h4 className="text-2xl font-black elegant-font uppercase tracking-tighter">2 - 3 Business Days</h4>
+              <h4 className="text-2xl font-black elegant-font uppercase tracking-tighter">{order?.shipping_time || '2 - 3 Business Days'}</h4>
             </div>
           </div>
 

@@ -19,12 +19,13 @@ const seed = async () => {
     for (const product of products) {
       try {
         await query(
-          'INSERT INTO products (name, price, description, category, rating, images, variants) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+          'INSERT INTO products (name, price, description, category, gender, rating, images, variants) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
           [
             product.name,
             product.price,
             product.description,
             product.category,
+            product.gender,
             product.rating,
             product.images,
             JSON.stringify(product.variants)

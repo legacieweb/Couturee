@@ -8,7 +8,7 @@ const Cart = () => {
   const navigate = useNavigate()
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
-  const shipping = cart.length > 0 ? 100 : 0
+  const shipping = cart.length > 0 ? 5 : 0
   const total = subtotal + shipping
 
   if (cart.length === 0) {
@@ -71,7 +71,7 @@ const Cart = () => {
                         <Plus size={12} strokeWidth={1.5} />
                       </button>
                     </div>
-                    <p className="text-sm font-bold text-primary italic">KSh {(item.price * item.quantity).toLocaleString()}</p>
+                    <p className="text-sm font-bold text-primary italic">$ {(item.price * item.quantity).toLocaleString()}</p>
                   </div>
                 </div>
               </div>
@@ -86,15 +86,15 @@ const Cart = () => {
               <div className="space-y-6 mb-10">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400 font-medium italic">Subtotal</span>
-                  <span className="font-bold">KSh {subtotal.toLocaleString()}</span>
+                  <span className="font-bold">$ {subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400 font-medium italic">Estimated Shipping (Nairobi)</span>
-                  <span className="font-bold">KSh {shipping.toLocaleString()}</span>
+                  <span className="font-bold">$ {shipping.toLocaleString()}</span>
                 </div>
                 <div className="pt-6 border-t border-gray-100 flex justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-widest">Total Amount</span>
-                  <span className="text-xl font-bold tracking-tight">KSh {total.toLocaleString()}</span>
+                  <span className="text-xl font-bold tracking-tight">$ {total.toLocaleString()}</span>
                 </div>
               </div>
 
