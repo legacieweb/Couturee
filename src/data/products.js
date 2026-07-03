@@ -407,9 +407,155 @@ export const products = [
       { id: 'v20-2', color: 'Black', sizes: 'Original', prices: [45], stocks: [8], imageIndex: 2 },
       { id: 'v20-3', color: 'Green', sizes: 'Original', prices: [45], stocks: [8], imageIndex: 4 },
     ],
-    shippingTime: { usa: "5-11 days", uk: "4-7 days",  japan: "4-7 days" },
+    shippingTime: { usa: "5-11 days", uk: "4-7 days", japan: "4-7 days" },
     category: "Bags",
     gender: "male",
     rating: 4.6
-  }
+  },
+  {
+    id: 21,
+    name: "Mens New-Style Functional Vest With Pockets Sports Travel Bag",
+    description: "A men’s functional vest with pockets is a wearable luggage piece designed to safely store essentials while traveling or doing sports. It distributes weight across your torso, freeing your hands and eliminating the need to carry an extra bag.",
+    images: [
+      "https://cf.cjdropshipping.com/quick/product/2d99fca4-5e54-4b9e-a866-9dde531b0398.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cf.cjdropshipping.com/quick/product/b915a813-7de1-4285-893a-6f4bb182f0d0.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cf.cjdropshipping.com/quick/product/4a78d1f4-2e03-4235-89dd-cce034681dbc.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/a6f3d6ca-6a65-4cf2-af48-d89d3d5417cb.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/88918c16-5fa6-488a-9a61-ba9d3b0df629.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/5e4d919a-d48e-474f-8392-5e8a34ea67a6.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://oss-cf.cjdropshipping.com/product/2026/01/20/08/79603178-fa3a-4123-87c9-d4597d120457_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/01/20/08/11cd66a7-15b2-4d90-a8b8-a9ca2d2cec95_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v21-1', color: 'Black Leather', sizes: 'Original', prices: [30], stocks: [8], imageIndex: 2 },
+      { id: 'v21-2', color: 'Black Python Pattern Leather', sizes: 'Original', prices: [30], stocks: [8], imageIndex: 3 },
+      { id: 'v21-3', color: 'Orange Peel', sizes: 'Original', prices: [30], stocks: [8], imageIndex: 4 },
+      { id: 'v21-4', color: 'Scorpio Camouflage', sizes: 'Original', prices: [30], stocks: [8], imageIndex: 5 },
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-7 days", japan: "4-7 days" },
+    category: "Bags",
+    gender: "male",
+    rating: 4.6
+  },
+  {
+    id: 22,
+    name: "Wear-resistant Waterproof Tactical Men's Backpack Backpack",
+    description: "A men’s backpack with a wear-resistant waterproof design is a durable and practical luggage piece designed to protect your belongings from the elements. It features a durable fabric and a waterproof lining that can withstand rain, snow, and other weather conditions.",
+    images: [
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/6a20012b-7149-4015-be84-9597df89357b_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/072e3c20-7bb1-4dae-8d38-5bf2c4dd4fa2_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/f79a4293-354b-489b-978a-e2bad0dc04dc_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/e1d3063f-3bb2-481d-855c-f7e7e795ee8b_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/9b30be7d-1e81-4b80-b0cd-4d9028cc96b8_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/16/11/38015a6f-b6fc-442d-a86b-10303103cb1a_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cf.cjdropshipping.com/quick/product/d445f12b-53a2-44e3-9f79-661e8a955710.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/c30c5896-b1c4-4845-bbe7-46e43f2b56d7.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800"
+    ],
+    variants: [
+      { id: 'v22-1', color: 'Black Leather', sizes: 'Original', prices: [55], stocks: [8], imageIndex: 7 },
+      { id: 'v22-2', color: 'Camouflage', sizes: 'Original', prices: [55], stocks: [8], imageIndex: 8 }
+   
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-7 days", japan: "4-7 days" },
+    category: "Bags",
+    gender: "male",
+    rating: 4.6
+  },
+    {
+    id: 23,
+    name: "Multi-functional Large Capacity Portable 15-inch Computer Travel Backpack",
+    description: "Compact and versatile, the Asenlin Travel Laptop Backpack and mixi Expandable Travel Backpack are top-tier choices that feature dedicated 15-inch computer sleeves, massive 20-35L expandability, built-in USB charging, and TSA-friendly layouts for everyday commutes or 3-5 day trips.",
+    images: [
+      "https://oss-cf.cjdropshipping.com/product/2025/03/09/06/1526402f-2fb5-4067-9b55-f6c96829c07b_fine.jpeg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://oss-cf.cjdropshipping.com/product/2025/03/09/06/f6ffccc2-500c-45b4-973c-366dce2ed8be_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/03/09/06/da7c8f0f-d3b8-446c-83d2-3b0ba5153b32_trans.jpeg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://oss-cf.cjdropshipping.com/product/2025/03/09/06/09d8adc2-5973-40f3-b829-d4f1b87d3df8_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v23-1', color: 'Black', sizes: 'Original', prices: [110], stocks: [8], imageIndex: 2 }   
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-7 days", japan: "4-7 days" },
+    category: "Bags",
+    gender: "male",
+    rating: 4.6
+  },
+
+
+
+   {
+    id: 24,
+    name: "Women Casual Tie Waist Ruffle Trim Flowy Dress",
+    description: "A women's casual tie-waist ruffle trim flowy dress is a universally flattering, breezy wardrobe staple perfect for warm weather.",
+    images: [
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/3b921bd4-beb1-4716-8a95-b12755561275.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/13f505b4-e82e-4646-a981-bfa3e4204cdd.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/94f6787e-67f3-4094-84b4-e43603b28c1e.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/b5d49ae0-7f86-458e-81d4-bc6b378715d0.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/44f06556-728a-4499-a4b7-1b73e7e35a28.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/903d1d9b-811c-4256-a869-600bb5e503cd.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/0d10c1c6-4499-4165-a79c-20daf7acfd90.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cc-west-usa.oss-us-west-1.aliyuncs.com/01eabcc0-4d2c-41e8-86f5-4c67819ceede.jpg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v24-1', color: 'Blue', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 0 },
+      { id: 'v24-2', color: 'Pink', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 1 },
+      { id: 'v24-3', color: 'White', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 2 },
+      { id: 'v24-4', color: 'Purple', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 3 },
+      { id: 'v24-5', color: 'Burgundy', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 4 },
+      { id: 'v24-6', color: 'Green', sizes: 'S,M,L,XL', prices: [30.55, 30.78, 30.00, 30.77], stocks: [14, 10, 8, 6], imageIndex: 5 },
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Dresses",
+    gender: "female",
+    rating: 4.7
+  },
+  
+ {
+    id: 25,
+    name: "Sexy Sweet Double Strap Vestidos Off Shoulder Dress For Women Vestido Fairy Mini Loose Dresses Summer New Sheer Mesh Long Sleeve",
+    description: "The Sexy Sweet Double Strap Vestidos Off Shoulder Dress features an airy, fairy-inspired aesthetic. This sheer mesh, long-sleeve mini dress combines a relaxed loose fit with delicate double straps and an off-the-shoulder neckline, making it a perfect lightweight piece for summer outings, festivals, and parties.",
+    images: [
+      "https://cf.cjdropshipping.com/quick/product/9cc8ae12-70df-45aa-afe3-38a6f8bec61d.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cf.cjdropshipping.com/quick/product/a474eb49-2fc0-4a22-9649-3f88efbe42ff.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/06/11/09/53499ace-184f-4af5-8c09-45e4670394ec_trans.jpeg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v25-1', color: 'Pink', sizes: 'S,M,L,XL,XXL', prices: [35.55, 35.78, 36.00, 36.77,36.99], stocks: [14, 10, 8, 6, 4], imageIndex: 0 },
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Dresses",
+    gender: "female",
+    rating: 4.7
+  },
+
+{
+    id: 26,
+    name: "Womens Chest Wrapping Backless Tube-Top Waist-Cinching Evening Gown Long Dress Women'S Solid Sexy Elegant Clothes Party Club Prom Summer Outfit",
+    description: "This stunning evening gown features a chest wrapping design with a backless tube-top style, waist-cinching silhouette, and solid sexy elegant clothes perfect for party club prom summer outfits.",
+    images: [
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/6b7fc510-e887-4dd7-b5b1-810046661bcc.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/712af48f-996b-4323-b609-ad8c17a288c8.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/18c5f9b6-ad9a-47cc-846a-4d337d671c3e.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/f534dde5-69b3-4e74-b758-d405f693deb6.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/e817f61d-1108-4cd3-aea1-41b41f79e129.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/9a18af60-339f-4efa-869b-4a3bf910eda9.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/ae167907-1756-4254-b8ea-17cc0de319a4.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/8c57a9a9-1530-42cb-81dc-6dd2428871da.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/14/05/d01bb5ef-d5bb-4883-a7f8-4eaab4551513.jpg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v26-1', color: 'Brick Red', sizes: 'S,M,L,XL', prices: [45,45,45,45], stocks: [14, 10, 8, 6], imageIndex: 0 },
+            { id: 'v26-2', color: 'White', sizes: 'S,M,L,XL', prices: [45,45,45,45], stocks: [14, 10, 6, 4], imageIndex: 4 },
+            { id: 'v26-3', color: 'Green', sizes: 'S,M,L,XL', prices: [45,45,45,45], stocks: [14, 8, 6, 4], imageIndex: 7 },
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Dresses",
+    gender: "female",
+    rating: 4.7
+  },
+
+
 ];

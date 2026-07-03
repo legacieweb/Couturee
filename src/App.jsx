@@ -422,7 +422,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
 <Route path="/products" element={<Products />} />
-               <Route path="/collections" element={<Products showCollectionsNav={true} />} />
+               <Route path="/collections" element={<Products />} />
                <Route path="/new-arrivals" element={<Collection title="New Arrivals" description="The Latest Creations" category="All" />} />
               <Route path="/gala-edit" element={<Collection title="Gala Edit" description="The Art of the Evening" category="Gala" />} />
               <Route path="/evening-luxe" element={<Collection title="Evening Luxe" description="Nighttime Sophistication" category="Evening" />} />

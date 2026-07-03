@@ -37,5 +37,6 @@ CREATE TABLE IF NOT EXISTS orders (
     delivery_method VARCHAR(50),
     shipping_details JSONB,
     status VARCHAR(50) DEFAULT 'Processing',
+    shipping_time VARCHAR(50),
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -218,13 +218,64 @@ app.get('/api/users', async (req, res) => {
 app.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    // Delete user's orders first (if any)
     await query('DELETE FROM orders WHERE user_id = $1', [id]);
     await query('DELETE FROM users WHERE id = $1', [id]);
     res.json({ message: 'User and associated data deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+const SHIPPING_CONFIG = {
+  kenya: {
+    country: 'Kenya',
+    shippingTime: '2-3 Business Days',
+    cost: 'KES 500',
+    regions: ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
+  },
+  usa: {
+    country: 'USA',
+    shippingTime: '7-10 Business Days',
+    cost: '$35',
+    regions: []
+  },
+  uk: {
+    country: 'UK',
+    shippingTime: '7-10 Business Days',
+    cost: '$35',
+    regions: []
+  },
+  canada: {
+    country: 'Canada',
+    shippingTime: '7-10 Business Days',
+    cost: '$35',
+    regions: []
+  },
+  japan: {
+    country: 'Japan',
+    shippingTime: '10-14 Business Days',
+    cost: '$45',
+    regions: []
+  },
+  southafrica: {
+    country: 'South Africa',
+    shippingTime: '5-7 Business Days',
+    cost: '$30',
+    regions: []
+  }
+};
+
+app.get('/api/shipping-times', (req, res) => {
+  const { country } = req.query;
+  if (!country) {
+    return res.json({ data: SHIPPING_CONFIG });
+  }
+  const key = country.toLowerCase();
+  const config = SHIPPING_CONFIG[key];
+  if (!config) {
+    return res.status(404).json({ error: 'Shipping info not available for this country' });
+  }
+  res.json({ data: config });
 });
 
 app.listen(PORT, () => {

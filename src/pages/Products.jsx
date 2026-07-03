@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { products as localProducts } from '../data/products'
 import { api } from '../utils/api'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, X, Search, ChevronRight, Loader2 } from 'lucide-react'
+import { Plus, Search, ChevronRight, Loader2 } from 'lucide-react'
 import { categories } from '../components/CollectionsNavBar'
 
 const getPriceRange = (variants) => {
@@ -14,7 +14,7 @@ const getPriceRange = (variants) => {
   return min === max ? `$${min.toLocaleString()}` : `$${min.toLocaleString()} - $${max.toLocaleString()}`
 }
 
-const Products = ({ forcedCategory, showCollectionsNav }) => {
+const Products = ({ forcedCategory }) => {
   const location = useLocation()
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
@@ -25,6 +25,16 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
   const [loading, setLoading] = useState(true)
 
   const genders = ['All', 'Male', 'Female']
+
+  const filteredCategories = useMemo(() => {
+    if (!gender || gender === 'All') return categories
+    const matchingSlugs = new Set(
+      products
+        .filter(p => p.gender && p.gender.toLowerCase() === gender.toLowerCase())
+        .map(p => p.category.toLowerCase())
+    )
+    return categories.filter(c => c.slug === 'all' || matchingSlugs.has(c.slug))
+  }, [gender, products])
 
   useEffect(() => {
     setProducts(localProducts)
@@ -46,18 +56,10 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
   useEffect(() => {
     let result = products
     const activeFilter = forcedCategory || categoryFilter
-    if (activeFilter && activeFilter !== 'All') {
+    if (activeFilter && activeFilter !== 'all') {
       result = result.filter(p => {
         const productCategory = p.category.toLowerCase()
         const filterCategory = activeFilter.toLowerCase()
-        if (filterCategory === 'underwear') return productCategory === 'underwear' || productCategory === 'undergarments'
-        if (filterCategory === 'shirts-tshirts') return productCategory === 'shirts' || productCategory === 't-shirts' || productCategory === 'tops'
-        if (filterCategory === 'sets') return productCategory === 'sets'
-        if (filterCategory === 'jumpsuits') return productCategory === 'jumpsuits'
-        if (filterCategory === 'pajamas') return productCategory === 'pajamas' || productCategory === 'loungewear'
-        if (filterCategory === 'hoodies-pullovers') return productCategory === 'hoodies' || productCategory === 'pullovers' || productCategory === 'sweatshirts'
-        if (filterCategory === 'hats-caps') return productCategory === 'hats' || productCategory === 'caps' || productCategory === 'headwear'
-        if (filterCategory === 'accessories') return productCategory === 'accessories' || productCategory === 'bags'
         return productCategory === filterCategory
       })
     }
@@ -85,14 +87,14 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
               Collection Archives
             </motion.span>
 <motion.h1 
-               initial={{ opacity: 0, y: 30 }}
-               animate={{ opacity: 1, y: 0 }}
-               key={gender}
-               className="text-6xl md:text-8xl lg:text-[10vw] font-black elegant-font tracking-tighter leading-[0.8] uppercase"
-             >
-               {gender === 'All' ? 'Signature' : gender} <br/>
-               <span className="italic font-normal serif lowercase ml-[10vw]">{gender === 'All' ? 'Pieces' : 'Collection'}</span>
-             </motion.h1>
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              key={gender}
+              className="text-6xl md:text-8xl lg:text-[10vw] font-black elegant-font tracking-tighter leading-[0.8] uppercase"
+            >
+              {gender === 'All' ? 'Signature' : gender} <br/>
+              <span className="italic font-normal serif lowercase ml-[10vw]">{gender === 'All' ? 'Pieces' : 'Collection'}</span>
+            </motion.h1>
           </div>
           <div className="flex items-center space-x-12">
             <div className="hidden md:block text-right">
@@ -121,19 +123,19 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
           >
             <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-3 gap-20">
 <div>
-                 <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Gender</h3>
-                 <div className="flex flex-col space-y-4">
-                   {genders.map(g => (
-                     <button 
-                       key={g}
-                       onClick={() => setGender(g)}
-                       className={`text-2xl font-black elegant-font text-left hover:text-accent transition-colors ${gender === g ? 'text-primary' : 'text-gray-300'}`}
-                     >
-                       {g}
-                     </button>
-                   ))}
-                 </div>
-               </div>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Gender</h3>
+                <div className="flex flex-col space-y-4">
+                  {genders.map(g => (
+                    <button 
+                      key={g}
+                      onClick={() => setGender(g)}
+                      className={`text-2xl font-black elegant-font text-left hover:text-accent transition-colors ${gender === g ? 'text-primary' : 'text-gray-300'}`}
+                    >
+                      {g}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div>
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Sort By</h3>
                 <div className="flex flex-col space-y-4 text-2xl font-black elegant-font text-gray-300">
@@ -160,53 +162,69 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
         )}
       </AnimatePresence>
 
-      {/* Collections Navigation */}
-      {showCollectionsNav && (
-        <div className="bg-white border-b border-gray-100">
-          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-            <div className="lg:hidden h-16 overflow-x-auto overflow-y-hidden">
-              <div className="flex items-center space-x-6 h-16 min-w-max">
-                <Link
-                  to="/collections"
-                  className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent whitespace-nowrap"
-                >
-                  All
-                </Link>
-                {categories.map((category) => (
-                  <Link
+      {/* Collections Navigation - Interactive Category Buttons */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-10">
+          <div className="lg:hidden">
+            <div className="flex overflow-x-auto space-x-4 pb-3 scrollbar-hide">
+              {filteredCategories.map((category) => {
+                const isActive = categoryFilter === category.slug || (categoryFilter === null && category.slug === 'all')
+                return (
+                  <motion.div
                     key={category.slug}
-                    to={`/collections?category=${category.slug}`}
-                    className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent whitespace-nowrap"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
+                    <Link
+                      to={`/products?category=${category.slug}${gender !== 'All' ? `&gender=${gender.toLowerCase()}` : ''}`}
+                      className={`flex-shrink-0 px-8 py-4 border-2 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-center font-bold uppercase tracking-widest text-[11px] ${
+                        isActive
+                          ? 'bg-accent text-white border-accent'
+                          : 'bg-white text-primary border-gray-200 hover:border-accent hover:bg-accent hover:text-white'
+                      }`}
+                    >
+                      {category.name}
+                    </Link>
+                  </motion.div>
+                )
+              })}
             </div>
-            <div className="hidden lg:flex items-center justify-center h-20">
-              <div className="flex items-center space-x-12">
-                <Link
-                  to="/collections"
-                  className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent"
-                >
-                  All Collections
-                </Link>
-                {categories.map((category) => (
-                  <Link
+          </div>
+          <div className="hidden lg:flex items-center justify-center">
+            <div className="flex items-center space-x-6">
+              {filteredCategories.map((category) => {
+                const isActive = categoryFilter === category.slug || (categoryFilter === null && category.slug === 'all')
+                return (
+                  <motion.div
                     key={category.slug}
-                    to={`/collections?category=${category.slug}`}
-                    className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 text-primary/60 hover:text-accent"
+                    whileHover={{ scale: 1.08, y: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="relative"
                   >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
+                    <Link
+                      to={`/products?category=${category.slug}${gender !== 'All' ? `&gender=${gender.toLowerCase()}` : ''}`}
+                      className={`px-10 py-5 border-2 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 font-bold uppercase tracking-widest text-sm flex items-center justify-center ${
+                        isActive
+                          ? 'bg-accent text-white border-accent'
+                          : 'bg-white text-primary border-gray-200 hover:border-accent hover:bg-accent hover:text-white'
+                      }`}
+                    >
+                      {category.name}
+                    </Link>
+                    {isActive && (
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-accent"
+                      />
+                    )}
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
-      )}
-
-      {/* Product Grid - Lookbook Style */}
+      </div>
       <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-24">
         {loading ? (
           <div className="py-32 flex flex-col items-center justify-center space-y-6">
@@ -260,8 +278,8 @@ const Products = ({ forcedCategory, showCollectionsNav }) => {
                     
                     <div className="flex items-center space-x-4">
 <span className="text-[10px] md:text-xs font-bold text-gray-400 tracking-widest">
-                          {getPriceRange(product.variants)}
-                        </span>
+                        {getPriceRange(product.variants)}
+                      </span>
                       <div className="flex-grow h-[1px] bg-gray-100 group-hover:bg-accent/30 transition-colors duration-700" />
                     </div>
                   </div>

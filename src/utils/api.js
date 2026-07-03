@@ -110,5 +110,11 @@ export const api = {
       headers: getHeaders()
     });
     return handleResponse(res);
+  },
+
+  // Shipping
+  getShippingTime: async (country) => {
+    const res = await fetch(`${API_URL}/shipping-times?country=${country}`);
+    return handleResponse(res);
   }
 };
