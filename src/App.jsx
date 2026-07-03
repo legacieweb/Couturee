@@ -70,29 +70,8 @@ const Navbar = () => {
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="grid grid-cols-3 items-center">
             
-            {/* Left: Navigation links */}
-            <div className="flex lg:flex items-center">
-              <button onClick={() => setIsOpen(true)} className="lg:hidden p-2 -ml-2">
-                <Menu size={20} strokeWidth={1.5} />
-              </button>
-<div className="hidden lg:flex items-center space-x-10">
-                <Link to="/products" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">All</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">All</span>
-                </Link>
-                <Link to="/products?gender=male" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Male</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Male</span>
-                </Link>
-                <Link to="/products?gender=female" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
-                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Female</span>
-                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Female</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Center: Brand Name (Logo) */}
-            <div className="flex justify-center">
+            {/* Left: Brand Name (Logo) */}
+            <div className="flex">
               <Link to="/" className="flex items-center group relative overflow-hidden py-2 px-4">
                 <div className="flex overflow-hidden relative">
                   {"SHABIL".split("").map((char, index) => (
@@ -120,9 +99,30 @@ const Navbar = () => {
                 />
               </Link>
             </div>
+            
+            {/* Center: Navigation links */}
+            <div className="flex justify-center">
+              <div className="hidden lg:flex items-center space-x-10">
+                <Link to="/products" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">All</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">All</span>
+                </Link>
+                <Link to="/products?gender=male" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Male</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Male</span>
+                </Link>
+                <Link to="/products?gender=female" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
+                  <span className="block group-hover:-translate-y-full transition-transform duration-500">Female</span>
+                  <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 text-accent">Female</span>
+                </Link>
+              </div>
+            </div>
 
-            {/* Right: Actions */}
+            {/* Right: Actions + Menu */}
             <div className="flex justify-end items-center space-x-4 md:space-x-10">
+              <button onClick={() => setIsOpen(true)} className="lg:hidden p-2 -ml-2">
+                <Menu size={20} strokeWidth={1.5} />
+              </button>
               <button onClick={() => setIsSearchOpen(true)} className="hover:text-accent transition-colors">
                 <Search size={18} strokeWidth={1.5} />
               </button>
