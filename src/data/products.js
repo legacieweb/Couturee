@@ -557,5 +557,113 @@ export const products = [
     rating: 4.7
   },
 
+  {
+    id: 27,
+    name: "Women's Solid Color Sexy Halter Hollow-out Jumpsuit",
+    description: "combine bold design cut-outs with a streamlined, sleek silhouette. These statement pieces are ideal for nightlife, summer festivals, resort wear, or high-fashion parties.",
+    images: [
+      "https://cf.cjdropshipping.com/quick/product/de04601a-18c2-4924-99e1-bc249d042a13.jpg?x-oss-process=image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/7232be4a-a04a-4ad8-bcf3-881d17e7f27c.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/5baabd2e-f954-4fdd-9c29-842232822873.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/169a29e4-331e-48bf-8542-7186ee307f87.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/ad7f4aeb-24e9-4fa7-9115-dff83749a222.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://oss-cf.cjdropshipping.com/product/2025/02/04/01/d3534831-0c7a-45db-bb25-d0b846bc066d.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/02/04/01/b4586bd0-f02f-4840-ba92-1f22c47d7bc8.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/02/04/01/547908b7-9316-44f7-9352-90e490035f01.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/02/04/01/ad3888a7-327d-4d42-a2db-86784748231d.jpg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v27-1', color: 'Black', sizes: 'S,M,L,XL,XXL', prices: [39,39,39,39,39], stocks: [14, 10, 8, 6,7], imageIndex: 1 },
+            { id: 'v27-2', color: 'White', sizes: 'S,M,L,XL,XXL', prices: [39,39,39,39], stocks: [14, 10, 6, 4,8], imageIndex: 2 },
+            { id: 'v27-3', color: 'Orange', sizes: 'S,M,L,XL,XXL', prices: [39,39,39,39], stocks: [14, 8, 6, 4,9], imageIndex: 3 },
+            { id: 'v27-4', color: 'Red', sizes: 'S,M,L,XL,XXL', prices: [39,39,39,39], stocks: [14, 8, 6, 4,10], imageIndex: 4 },
 
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Jumpsuits",
+    gender: "female",
+    rating: 4.7
+  },
+
+
+  {
+    id: 28,
+    name: "Belly Contracting Hip Lift Body Shaping Jumpsuit",
+    description: "This hip lift body shaping jumpsuit is designed to help you achieve a more defined and toned midsection. It features a high waistline and a fitted design that hugs your curves, providing a flattering and supportive fit. The jumpsuit is made from high-quality materials that are comfortable and breathable, making it perfect for any workout or activity.",
+    images: [
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/c9d36751-f381-4189-8107-23a6dedeb500_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/95564187-0958-4646-a052-f03d52a0130c_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/686a09f7-6979-4028-8c1c-24129de26e1b_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/d41fc1ea-3bb8-49d5-bd56-267c29523889_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/075915c6-3dd0-410e-b515-acbc9c74e405_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/6e80cca4-e6e5-49ba-8127-c1ead886c951_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2025/08/25/05/f227e404-672f-4a19-bf2f-aa67d3aa3686_fine.jpeg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v28-1', color: 'Black', sizes: 'S,M,L,XL,2XL,3XL,4XL,5XL', prices: [41,41,41,41,41,41,41,41], stocks: [14, 10, 8, 6,7,6,5,4], imageIndex: 0 },
+            { id: 'v28-2', color: 'Skin Color', sizes: 'S,M,L,XL,2XL,3XL,4XL,5XL', prices: [41,41,41,41,41,41,41,41], stocks: [14, 10, 8, 6,7,6,5,4], imageIndex: 2 },
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Jumpsuits",
+    gender: "female",
+    rating: 4.7
+  },
+
+   {
+    id: 29,
+    name: "Spaghetti Strap High Waist Jumpsuit For Women",
+    description: "This high waist jumpsuit features a spaghetti strap design that adds a touch of elegance and style to any outfit. The jumpsuit is made from high-quality materials that are comfortable and breathable, making it perfect for any workout or activity.",
+  
+    images: [
+      "https://cf.cjdropshipping.com/17100288/2403100301200320900.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://cf.cjdropshipping.com/quick/product/4beb9ab6-b0d4-4bc8-8da3-53fede51d973.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/ef5c7874-936d-45b0-9024-f756b4336d6d.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/0838c132-b43a-4765-ae1f-519294637ecf.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800",
+      "https://cf.cjdropshipping.com/quick/product/180e633f-98e4-4353-bfd1-07a1e3609f0c.jpg?x-oss-process=image/format,webp,image/resize,m_fill,m_pad,w_800,h_800"
+    ],
+    variants: [
+      { id: 'v29-1', color: 'LC6411667 Black', sizes: 'XS,S,M,L,XL', prices: [39,39,39,39,39], stocks: [14, 10, 8, 6,7], imageIndex: 0 },
+            { id: 'v29-2', color: 'LC6411667P1109', sizes: 'XS,S,M,L,XL,XS', prices: [39,39,39,39], stocks: [14, 10, 6, 4,8], imageIndex: 1 },
+            { id: 'v29-3', color: 'LC6411667P203', sizes: 'XS,S,M,L,XL', prices: [39,39,39,39], stocks: [14, 8, 6, 4,9], imageIndex: 2 },
+            { id: 'v29-4', color: 'LC6411667P608', sizes: 'XS,S,M,L,XL', prices: [39,39,39,39], stocks: [14, 8, 6, 4,10], imageIndex: 3 },
+                        { id: 'v29-5', color: 'LC6411667P704', sizes: 'XS,S,M,L,XL', prices: [39,39,39,39], stocks: [14, 8, 6, 4,10], imageIndex: 4 },
+
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Jumpsuits",
+    gender: "female",
+    rating: 4.7
+  },
+   {
+    id: 30,
+    name: "V-neck Halter Neck Jumpsuit For Women",
+    description: "This V-neck halter neck jumpsuit features a high waistline and a fitted design that hugs your curves, providing a flattering and supportive fit. The jumpsuit is made from high-quality materials that are comfortable and breathable, making it perfect for any occasion.",
+  
+    images: [
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/b8e18ec7-4fa2-4495-85b6-a4b596e3dc59.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/dbb47db5-d6c9-4e9d-9d80-fb7f1dd81f95.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/1c08535e-eed5-425f-8b22-f4d438c7032f.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/95f5b72e-be45-4590-a38f-8e497d9e8d75.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/2e8813a0-fb57-4efb-bf17-c318865a875e.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/85ca0503-0f11-4175-be07-138c99d95609.jpg?x-oss-process=image%2Fformat%2Cwebp",
+      "https://oss-cf.cjdropshipping.com/product/2026/03/23/07/8864558f-08cf-4569-a566-4eb7457ae252.jpg?x-oss-process=image%2Fformat%2Cwebp"
+    ],
+    variants: [
+      { id: 'v30-1', color: 'Blue', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 1 },
+            { id: 'v30-2', color: 'Apricot', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 2 },
+      { id: 'v30-1', color: 'Black', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 3 },
+      { id: 'v30-1', color: 'Fluorescent Yellow', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 4 },
+      { id: 'v30-1', color: 'White', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 5 },
+      { id: 'v30-1', color: 'Wine Red', sizes: 'S,M,L,XL,2XL,3XL', prices: [39,39,39,39,39,39], stocks: [14, 10, 8, 6,7,63], imageIndex: 6 },
+
+
+
+    ],
+    shippingTime: { usa: "5-11 days", uk: "4-9 days", canada: "7-15 days", japan: "4-7 days", china: "3-5 days", kenya: "20-60 days" },
+    category: "Jumpsuits",
+    gender: "female",
+    rating: 4.7
+  },
 ];
