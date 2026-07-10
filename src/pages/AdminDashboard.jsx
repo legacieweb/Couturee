@@ -746,6 +746,7 @@ const AdminDashboard = () => {
                     <option value="Tops">Tops</option>
                     <option value="Jackets">Jackets</option>
                     <option value="Dresses">Dresses</option>
+                    <option value="Jumpsuits">Jumpsuits</option>
                     <option value="Bottoms">Bottoms</option>
                     <option value="Handbags">Handbags</option>
                     <option value="Hoodies">Hoodies</option>
