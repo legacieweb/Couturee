@@ -17,16 +17,12 @@ const ShippingPolicy = () => {
         <div className="space-y-12 text-gray-600 leading-relaxed prose prose-lg max-w-none">
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Delivery Estimates</h2>
-            <p>Each SHABIL piece is handcrafted with precision. Please allow 5-10 business days for standard delivery within Kenya. International shipping times vary by destination and typically take 10-15 business days.</p>
+            <p>Each SHABIL piece is handcrafted with precision. Please allow 2-3 business days for standard delivery within Kenya. International shipping times vary by destination and typically take 10-15 business days.</p>
           </section>
 
           <section>
             <h2 className="text-2xl font-black elegant-font uppercase tracking-tight text-primary mb-6">Shipping Rates</h2>
-            <p>Our standard delivery rates within Kenya are as follows:</p>
-<ul className="list-disc pl-6 mt-4 space-y-2">
-               <li><strong>Nairobi:</strong> $5</li>
-               <li><strong>Other Counties:</strong> $10</li>
-             </ul>
+            <p>Our standard delivery rate within Kenya is a flat $3 USD.</p>
             <p className="mt-4">Rates are applied at checkout based on your selected delivery location.</p>
           </section>
 

@@ -230,7 +230,7 @@ const SHIPPING_CONFIG = {
   kenya: {
     country: 'Kenya',
     shippingTime: '2-3 Business Days',
-    cost: 'KES 500',
+    cost: '$3',
     regions: ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
   },
   usa: {

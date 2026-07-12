@@ -44,7 +44,8 @@ export const CartProvider = ({ children }) => {
         selectedSize: firstSize, 
         selectedColor: selectedColor, 
         quantity,
-        price: variantPrice || variant.prices?.[0]
+        price: variantPrice || variant.prices?.[0],
+        shippingTime: product.shippingTime
       }];
     });
   };
