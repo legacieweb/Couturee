@@ -480,35 +480,37 @@ const Checkout = () => {
 
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-40 space-y-8">
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-gray-50 p-10 md:p-14 space-y-10"
-              >
-                <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Order Archive</h3>
-                  <div className="space-y-6 max-h-[320px] overflow-y-auto pr-4 custom-scrollbar">
-                    {cart.map((item) => {
-                      const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
-                      const productShippingTime = item.shippingTime?.[countryKey] || item.shippingTime?.kenya
-                      return (
-                      <div key={`${item.id}-${item.variantId}`} className="flex space-x-5 pb-4 border-b border-gray-100 last:border-0">
-                        <div className="h-20 w-16 bg-white flex-shrink-0">
-                          <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale" />
-                        </div>
-                        <div className="flex-grow flex flex-col justify-center">
-                          <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 leading-tight">{item.name}</h4>
-                          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
-                          {productShippingTime && (
-                            <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
-                          )}
-                          <p className="text-xs font-black elegant-font">$ {(item.price * item.quantity).toLocaleString()}</p>
-                        </div>
-                      </div>
-                      )
-                    })}
-                  </div>
-                </div>
+<motion.div 
+                 initial={{ opacity: 0, y: 30 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="bg-gray-50 p-10 md:p-14 space-y-10"
+               >
+                 <div>
+                   <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Order Archive</h3>
+                   <div className="space-y-6 max-h-[320px] overflow-y-auto pr-4 custom-scrollbar">
+                     {cart.map((item) => {
+                       const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
+                       const productShippingTime = formData.country === 'kenya' 
+                         ? item.shippingTime?.kenya || shippingData?.shippingTime
+                         : item.shippingTime?.[countryKey] || item.shippingTime?.kenya
+                       return (
+                       <div key={`${item.id}-${item.variantId}`} className="flex space-x-5 pb-4 border-b border-gray-100 last:border-0">
+                         <div className="h-20 w-16 bg-white flex-shrink-0">
+                           <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale" />
+                         </div>
+                         <div className="flex-grow flex flex-col justify-center">
+                           <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 leading-tight">{item.name}</h4>
+                           <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
+                           {productShippingTime && (
+                             <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
+                           )}
+                           <p className="text-xs font-black elegant-font">$ {(item.price * item.quantity).toLocaleString()}</p>
+                         </div>
+                       </div>
+                       )
+                     })}
+                   </div>
+                 </div>
 
                 <div className="space-y-5">
                   <div className="flex justify-between text-xs font-serif italic text-gray-500">
