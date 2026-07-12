@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShieldCheck, Lock, CreditCard, Check, Package, Globe, Truck, Clock, ChevronRight, Loader2 } from 'lucide-react'
+import { ShieldCheck, Lock, CreditCard, Check, Package, Globe, Truck, Clock, ChevronRight, Loader2, X, MapPin } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { api } from '../utils/api'
@@ -17,6 +17,15 @@ const COUNTRY_LIST = [
   { value: 'japan', label: 'Japan', flag: '🇯🇵' },
   { value: 'southafrica', label: 'South Africa', flag: '🇿🇦' }
 ]
+
+const SHIPPING_TIMES = {
+  kenya: '2-3 Business Days',
+  usa: '7-10 Business Days',
+  uk: '7-10 Business Days',
+  canada: '7-10 Business Days',
+  japan: '10-14 Business Days',
+  southafrica: '5-7 Business Days'
+}
 
 const SmoothCounter = ({ target, prefix = '', suffix = '' }) => {
   const [display, setDisplay] = useState('0')
@@ -106,6 +115,56 @@ const SuccessPopup = ({ order, onClose }) => (
   </motion.div>
 )
 
+const CountrySelectorPopup = ({ isOpen, onClose, onSelectCountry }) => {
+  if (!isOpen) return null
+  
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.9, opacity: 0, y: 20 }}
+          className="bg-white max-w-md w-full p-8 md:p-12 space-y-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-black elegant-font uppercase tracking-tighter">Select Your Country</h3>
+            <button onClick={onClose} className="p-2 hover:bg-gray-50 transition-colors">
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            {COUNTRY_LIST.map((country) => (
+              <button
+                key={country.value}
+                onClick={() => {
+                  onSelectCountry(country.value)
+                  onClose()
+                }}
+                className="p-4 border-2 border-gray-100 hover:border-primary hover:bg-primary/5 transition-all flex items-center space-x-3"
+              >
+                <span className="text-2xl">{country.flag}</span>
+                <div className="text-left">
+                  <p className="text-sm font-bold">{country.label}</p>
+                  <p className="text-[10px] text-gray-500">Delivery: {SHIPPING_TIMES[country.value]}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
+
 const Checkout = () => {
   const { cart, clearCart } = useCart()
   const { user } = useAuth()
@@ -118,6 +177,7 @@ const Checkout = () => {
   const [shippingError, setShippingError] = useState('')
   const [shippingCache, setShippingCache] = useState({})
   const [mounted, setMounted] = useState(false)
+  const [showCountryPopup, setShowCountryPopup] = useState(false)
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -160,15 +220,19 @@ const Checkout = () => {
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
   const shippingCostRaw = shippingData?.cost || '$0'
-  const shippingTime = shippingData?.shippingTime || ''
   const shippingCostValue = parseFloat(shippingCostRaw.replace(/[^0-9.]/g, '')) || 0
   const orderTotal = subtotal + shippingCostValue
+  const actualShippingTime = SHIPPING_TIMES[formData.country] || shippingData?.shippingTime
 
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSelectCountry = (country) => {
+    setFormData(prev => ({ ...prev, country }))
   }
 
   const loadImage = (url) => {
@@ -200,7 +264,7 @@ const Checkout = () => {
     doc.text(`Customer: ${order.customer_name}`, 20, 59)
     doc.text(`Method: Doorstep Delivery`, 20, 66)
     doc.text(`Reference: ${order.payment_reference}`, 20, 77)
-    doc.text(`Estimated Shipping: ${shippingData?.shippingTime || 'Calculating'}`, 20, 84)
+    doc.text(`Shipping Time: ${actualShippingTime || 'Calculating'}`, 20, 84)
     const tableData = order.items.map(item => [
       item.name,
       `${item.selectedSize} / ${item.selectedColor}`,
@@ -243,10 +307,10 @@ const Checkout = () => {
         balance_due: 0,
         payment_option: 'full',
         delivery_method: 'delivery',
-        shipping_details: { ...formData, shipping_time: shippingData?.shippingTime }
+        shipping_details: { ...formData, shipping_time: actualShippingTime }
       }
       const response = await api.createOrder(orderData)
-      const orderWithShipping = { ...response, shipping_time: shippingData?.shippingTime }
+      const orderWithShipping = { ...response, shipping_time: actualShippingTime }
       setOrderInfo(orderWithShipping)
       await generatePDF(orderWithShipping)
       clearCart()
@@ -290,6 +354,12 @@ const Checkout = () => {
 
   return (
     <div className="pt-40 pb-24 bg-white min-h-screen">
+      <CountrySelectorPopup 
+        isOpen={showCountryPopup} 
+        onClose={() => setShowCountryPopup(false)} 
+        onSelectCountry={handleSelectCountry}
+      />
+
       <AnimatePresence>
         {paymentProcessing && <Preloader />}
         {showSuccess && (
@@ -370,17 +440,19 @@ const Checkout = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Country</label>
-                      <select 
-                        required 
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif bg-transparent" 
-                      >
-                        {COUNTRY_LIST.map(c => (
-                          <option key={c.value} value={c.value}>{c.flag} {c.label}</option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() => setShowCountryPopup(true)}
+                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif bg-transparent flex items-center justify-between"
+                        >
+                          <span className="flex items-center space-x-2">
+                            <MapPin size={16} className="text-accent" />
+                            <span>{COUNTRY_LIST.find(c => c.value === formData.country)?.flag} {COUNTRY_LIST.find(c => c.value === formData.country)?.label}</span>
+                          </span>
+                          <ChevronRight size={16} className="text-gray-400" />
+                        </button>
+                      </div>
                     </div>
                     {formData.country === 'kenya' && (
                       <div className="space-y-2">
@@ -480,37 +552,37 @@ const Checkout = () => {
 
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-40 space-y-8">
-<motion.div 
-                 initial={{ opacity: 0, y: 30 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 className="bg-gray-50 p-10 md:p-14 space-y-10"
-               >
-                 <div>
-                   <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Order Archive</h3>
-                   <div className="space-y-6 max-h-[320px] overflow-y-auto pr-4 custom-scrollbar">
-                     {cart.map((item) => {
-                       const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
-                       const productShippingTime = formData.country === 'kenya' 
-                         ? item.shippingTime?.kenya || shippingData?.shippingTime
-                         : item.shippingTime?.[countryKey] || item.shippingTime?.kenya
-                       return (
-                       <div key={`${item.id}-${item.variantId}`} className="flex space-x-5 pb-4 border-b border-gray-100 last:border-0">
-                         <div className="h-20 w-16 bg-white flex-shrink-0">
-                           <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale" />
-                         </div>
-                         <div className="flex-grow flex flex-col justify-center">
-                           <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 leading-tight">{item.name}</h4>
-                           <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
-                           {productShippingTime && (
-                             <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
-                           )}
-                           <p className="text-xs font-black elegant-font">$ {(item.price * item.quantity).toLocaleString()}</p>
-                         </div>
-                       </div>
-                       )
-                     })}
-                   </div>
-                 </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-gray-50 p-10 md:p-14 space-y-10"
+              >
+                <div>
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Order Archive</h3>
+                  <div className="space-y-6 max-h-[320px] overflow-y-auto pr-4 custom-scrollbar">
+                    {cart.map((item) => {
+                      const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
+                      const productShippingTime = formData.country === 'kenya' 
+                        ? item.shippingTime?.kenya || shippingData?.shippingTime
+                        : item.shippingTime?.[countryKey] || item.shippingTime?.kenya
+                      return (
+                        <div key={`${item.id}-${item.variantId}`} className="flex space-x-5 pb-4 border-b border-gray-100 last:border-0">
+                          <div className="h-20 w-16 bg-white flex-shrink-0">
+                            <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale" />
+                          </div>
+                          <div className="flex-grow flex flex-col justify-center">
+                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 leading-tight">{item.name}</h4>
+                            <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
+                            {productShippingTime && (
+                              <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
+                            )}
+                            <p className="text-xs font-black elegant-font">$ {(item.price * item.quantity).toLocaleString()}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
 
                 <div className="space-y-5">
                   <div className="flex justify-between text-xs font-serif italic text-gray-500">
@@ -520,6 +592,10 @@ const Checkout = () => {
                   <div className="flex justify-between text-xs font-serifitalic text-gray-500">
                     <span>Shipping</span>
                     <span className="text-primary font-medium">{shippingData?.cost || 'Calculating...'}</span>
+                  </div>
+                  <div className="flex justify-between text-xs font-serifitalic text-gray-500">
+                    <span>Shipping Time</span>
+                    <span className="text-primary font-bold">{actualShippingTime || 'Calculating...'}</span>
                   </div>
                   <div className="h-[1px] bg-gray-200" />
                   <div className="flex justify-between pt-4 text-2xl font-black elegant-font uppercase tracking-tighter">
@@ -580,8 +656,8 @@ const Checkout = () => {
                         <div className="flex items-start space-x-4">
                           <Clock size={18} className="text-accent mt-0.5 flex-shrink-0" />
                           <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Est. Delivery</p>
-                            <p className="text-lg font-black elegant-font tracking-tight">{shippingData.shippingTime}</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Shipping Time</p>
+                            <p className="text-lg font-black elegant-font tracking-tight">{actualShippingTime}</p>
                           </div>
                         </div>
                       </div>
