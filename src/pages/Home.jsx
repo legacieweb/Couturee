@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { products as localProducts } from '../data/products'
 import { api } from '../utils/api'
 import { ArrowUpRight, Play, Globe, Award, Sparkles, Loader2 } from 'lucide-react'
-import shabilVideo from '../coutree video.mp4'
 
 const getPriceRange = (variants) => {
   const allPrices = variants.flatMap(v => v.prices || [])
@@ -33,125 +32,58 @@ const Home = () => {
 
   return (
     <div ref={containerRef} className="bg-white">
-      {/* Hero Section - Redesigned Cinematic Editorial */}
-      <section className="relative h-[110vh] flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
-        {/* Background Layer with Parallax */}
-        <motion.div 
-          style={{ y: y1, scale: 1.1 }}
-          className="absolute inset-0 z-0 opacity-60"
-        >
-          <img 
-            src="https://static.fibre2fashion.com//articleresources/images/23/2287/988ebe_Big.jpg" 
-            className="w-full h-full object-cover grayscale"
-            alt="Shabil Background"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0a]" />
-        </motion.div>
+      <section className="relative min-h-[min(820px,100svh)] overflow-hidden bg-[#f5f4ef] pt-20 md:pt-28">
+        <div className="mx-auto grid min-h-[calc(100svh-5rem)] max-w-[1800px] grid-cols-1 md:grid-cols-[0.88fr_1.12fr]">
+          <div className="relative z-10 flex flex-col justify-center px-6 py-6 sm:px-10 sm:py-12 md:px-12 md:py-20 lg:px-20">
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <p className="mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[#776b4d] md:mb-7">
+                <span className="h-px w-8 bg-accent" />
+                Nairobi design, made to move
+              </p>
+              <h1 className="max-w-[11ch] text-4xl font-black uppercase leading-[0.98] text-[#171816] sm:text-6xl lg:text-7xl xl:text-8xl">
+                Dress like <span className="font-normal italic normal-case text-[#a88745]">you mean it.</span>
+              </h1>
+              <p className="mt-4 max-w-md text-sm leading-6 text-[#555650] sm:mt-7 sm:text-base sm:leading-7">
+                Considered pieces for wherever your story takes you. Discover the latest from Shabil.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3 sm:mt-9 sm:gap-y-4">
+                <Link to="/products" className="group inline-flex min-h-14 items-center gap-7 bg-[#171816] px-7 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[#a88745]">
+                  Explore the collection
+                  <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </Link>
+              </div>
+            </motion.div>
+            <p className="mt-5 text-[9px] font-bold uppercase tracking-[0.24em] text-[#8b8b83] sm:mt-14">01 / Designed in Nairobi · Worn everywhere</p>
+          </div>
 
-        {/* Floating Narrative Text (Left) */}
-        <div className="absolute left-12 top-1/2 -translate-y-1/2 z-20 hidden xl:block">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.5, delay: 1 }}
-            className="space-y-2"
+            initial={{ opacity: 0, scale: 1.03 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative min-h-[24svh] overflow-hidden sm:min-h-[38svh] md:min-h-0"
           >
-            <p className="text-[8px] font-bold uppercase tracking-[0.5em] text-accent/60 vertical-text py-12 border-l border-accent/20">ESTABLISHED 2024</p>
+            <img
+              src={localProducts.find((product) => product.id === 9)?.images?.[0]}
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              alt="Shabil summer dress from the latest collection"
+              fetchpriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
+            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white sm:bottom-9 sm:left-9 sm:right-9">
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-white/75">The latest edit</p>
+                <p className="mt-2 text-lg font-semibold">A little more you.</p>
+              </div>
+              <Link to="/product/9" aria-label="Discover the featured dress" className="grid h-12 w-12 place-items-center border border-white/70 transition-colors hover:bg-white hover:text-[#171816]">
+                <ArrowUpRight size={18} />
+              </Link>
+            </div>
           </motion.div>
         </div>
-
-        {/* Main Content */}
-        <div className="relative z-10 w-full max-w-[1800px] px-6 md:px-12 flex flex-col items-center">
-          <div className="relative w-full text-center">
-            {/* Massive Background Text */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full pointer-events-none select-none overflow-hidden"
-            >
-              <h2 className="text-[25vw] font-black elegant-font opacity-[0.03] leading-none whitespace-nowrap text-white">
-                Shabil
-              </h2>
-            </motion.div>
-
-            {/* Foreground Typography */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
-              className="relative"
-            >
-              <motion.h1 
-                className="text-[14vw] md:text-[10vw] font-black elegant-font leading-[0.75] tracking-tighter text-white uppercase"
-              >
-                <span className="block overflow-hidden">
-                  <motion.span 
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                    className="block"
-                  >
-                    High
-                  </motion.span>
-                </span>
-                <span className="block overflow-hidden mt-2">
-                  <motion.span 
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-                    className="block italic font-normal serif lowercase"
-                  >
-                    Fashion
-                  </motion.span>
-                </span>
-              </motion.h1>
-
-              {/* Central Badge/Detail */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, duration: 1 }}
-                className="mt-12 flex flex-col items-center space-y-12"
-              >
-                <div className="w-[1px] h-24 bg-gradient-to-b from-accent/0 via-accent to-accent/0" />
-                
-                <div className="flex flex-col items-center space-y-6">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.8em] text-accent text-center max-w-xs">
-                    THE PINNACLE OF KENYAN ARTISANSHIP
-                  </p>
-                  
-                  <Link to="/products" className="group relative px-20 py-8 overflow-hidden border border-white/10 hover:border-accent/40 transition-colors duration-700">
-                    {/* Architectural Borders */}
-                    <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-accent opacity-0 group-hover:opacity-100 transition-all duration-700 -translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0" />
-                    <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-accent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0" />
-                    <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-accent opacity-0 group-hover:opacity-100 transition-all duration-700 -translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0" />
-                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-accent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-2 translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0" />
-                    
-                    {/* Background Sweep */}
-                    <div className="absolute inset-0 bg-white/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-[0.16,1,0.3,1]" />
-                    
-                    <div className="relative h-6 overflow-hidden">
-                      <motion.div 
-                        className="flex flex-col items-center"
-                        whileHover={{ y: -24 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white flex items-center">
-                          Explore Collection
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.6em] text-accent mt-4 flex items-center">
-                          Discover Products <ArrowUpRight size={12} className="ml-2" />
-                        </span>
-                      </motion.div>
-                    </div>
-                  </Link>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
       </section>
 
       {/* Featured Products - Price Range Display */}
@@ -266,12 +198,9 @@ const Home = () => {
 
       {/* Video / Atmosphere Section */}
       <section className="relative h-[80vh] overflow-hidden flex items-center justify-center group">
-        <video 
-          src={shabilVideo} 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+        <img
+          src={localProducts[1]?.images?.[0]}
+          alt="Shabil collection"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />

@@ -46,7 +46,7 @@ const Contact = () => {
                 <a href="https://www.instagram.com/shabil/" target="_blank" rel="noopener noreferrer">
                   <Instagram size={24} className="text-gray-400 hover:text-primary transition-colors" />
                 </a>
-                <a href="https://www.tiktok.com/@shabil" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.tiktok.com/@shabil.fashion.co" target="_blank" rel="noopener noreferrer">
                   <svg 
                     viewBox="0 0 24 24" 
                     width="24" 

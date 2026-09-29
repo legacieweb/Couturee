@@ -26,6 +26,7 @@ const SHIPPING_TIMES = {
   japan: '10-14 Business Days',
   southafrica: '5-7 Business Days'
 }
+const DELIVERY_FEE = 1
 
 const SmoothCounter = ({ target, prefix = '', suffix = '' }) => {
   const [display, setDisplay] = useState('0')
@@ -205,8 +206,16 @@ const Checkout = () => {
       setShippingCache(prev => ({ ...prev, [country]: data }))
     } catch (err) {
       console.error('Failed to fetch shipping time:', err)
-      setShippingError('Unable to fetch shipping details. Please try again.')
-      setShippingData(null)
+      const countryLabel = COUNTRY_LIST.find((option) => option.value === country)?.label.replace(' (Domestic)', '') || country
+      setShippingError('')
+      setShippingData({
+        country: countryLabel,
+        shippingTime: SHIPPING_TIMES[country],
+        cost: `$${DELIVERY_FEE}`,
+        regions: country === 'kenya'
+          ? ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
+          : []
+      })
     } finally {
       setShippingLoading(false)
     }
@@ -219,9 +228,7 @@ const Checkout = () => {
   }, [formData.country, fetchShippingTime, mounted])
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
-  const shippingCostRaw = shippingData?.cost || '$0'
-  const shippingCostValue = parseFloat(shippingCostRaw.replace(/[^0-9.]/g, '')) || 0
-  const orderTotal = subtotal + shippingCostValue
+  const orderTotal = subtotal + DELIVERY_FEE
   const actualShippingTime = SHIPPING_TIMES[formData.country] || shippingData?.shippingTime
 
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
@@ -353,7 +360,7 @@ const Checkout = () => {
   const isFormValid = formData.name && formData.email && formData.address && formData.phone && (formData.country === 'kenya' ? formData.city : formData.country)
 
   return (
-    <div className="pt-40 pb-24 bg-white min-h-screen">
+    <div className="pt-28 md:pt-36 pb-20 bg-[#f4f5f2] min-h-screen">
       <CountrySelectorPopup 
         isOpen={showCountryPopup} 
         onClose={() => setShowCountryPopup(false)} 
@@ -376,27 +383,26 @@ const Checkout = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-16"
+          className="mb-10 md:mb-14"
         >
           <motion.span 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-[10px] font-bold uppercase tracking-[0.5em] text-accent mb-6 block"
+            className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-4 block"
           >
             Secure Checkout
           </motion.span>
-          <h1 className="text-5xl md:text-7xl font-black elegant-font tracking-tighter uppercase leading-[0.9]">
-            Finalize<br />
-            <span className="italic font-normal serif lowercase ml-[10vw]">Your Order</span>
+          <h1 className="text-4xl md:text-6xl font-black elegant-font uppercase leading-[0.95]">
+            Complete your order
           </h1>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-          <div className="lg:col-span-7 space-y-16">
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-16">
-              <section>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-10">Contact Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 max-w-[1440px]">
+          <div className="lg:col-span-7">
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+              <section className="bg-white border border-gray-200 p-5 sm:p-8">
+                <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-6">Contact information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Full Name</label>
                     <input 
@@ -405,7 +411,7 @@ const Checkout = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                     />
                   </div>
                   <div className="space-y-2">
@@ -416,15 +422,15 @@ const Checkout = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                     />
                   </div>
                 </div>
               </section>
 
-              <section>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-10">Shipping Destination</h3>
-                <div className="space-y-8">
+              <section className="bg-white border border-gray-200 p-5 sm:p-8">
+                <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-6">Delivery address</h3>
+                <div className="space-y-5">
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Delivery Address</label>
                     <input 
@@ -434,7 +440,7 @@ const Checkout = () => {
                       value={formData.address}
                       onChange={handleInputChange}
                       placeholder="Apartment, suite, etc." 
-                      className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                      className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -444,7 +450,7 @@ const Checkout = () => {
                         <button
                           type="button"
                           onClick={() => setShowCountryPopup(true)}
-                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif bg-transparent flex items-center justify-between"
+                          className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans flex items-center justify-between"
                         >
                           <span className="flex items-center space-x-2">
                             <MapPin size={16} className="text-accent" />
@@ -462,7 +468,7 @@ const Checkout = () => {
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif bg-transparent" 
+                          className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                         >
                           {shippingData?.regions?.map(r => (
                             <option key={r} value={r}>{r}</option>
@@ -479,7 +485,7 @@ const Checkout = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="07XX XXX XXX" 
-                        className="w-full border-b border-gray-100 py-3 text-sm focus:outline-none focus:border-accent font-serif" 
+                        className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                       />
                     </div>
                   </div>
@@ -499,10 +505,10 @@ const Checkout = () => {
                 </div>
               </section>
 
-              <section>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-10">Payment Method</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-6 border-2 border-primary flex items-center justify-between cursor-pointer">
+              <section className="bg-white border border-gray-200 p-5 sm:p-8">
+                <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-6">Payment method</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="p-4 border border-primary flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <CreditCard size={20} className="text-primary" />
                       <span className="text-[10px] font-bold uppercase tracking-widest">Card/M-PESA</span>
@@ -510,7 +516,7 @@ const Checkout = () => {
                     <div className="h-4 w-4 rounded-full border-4 border-primary" />
                   </div>
                 </div>
-                <div className="mt-8 p-6 bg-gray-50 flex items-start space-x-4">
+                <div className="mt-5 p-4 bg-[#f4f5f2] flex items-start space-x-4">
                   <div className="text-accent mt-0.5">
                     <ShieldCheck size={18} />
                   </div>
@@ -526,8 +532,8 @@ const Checkout = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  <div className="p-6 bg-accent/5 border border-accent/10">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">Payment Summary</p>
+                  <div className="p-5 bg-white border border-gray-200">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500 mb-2">Payment summary</p>
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium">Total Due</span>
                       <span className="text-xl font-black">$ {displayAmount.toLocaleString()}</span>
@@ -535,14 +541,14 @@ const Checkout = () => {
                   </div>
                   <PaystackButton 
                     {...componentProps}
-                    className="w-full h-20 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-accent transition-all flex items-center justify-center space-x-4"
+                    className="w-full min-h-16 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.25em] hover:bg-accent transition-colors flex items-center justify-center space-x-4"
                   />
                 </motion.div>
               )}
               {!isFormValid && (
                 <button 
                   disabled
-                  className="w-full h-20 bg-gray-100 text-gray-400 text-[10px] font-bold uppercase tracking-[0.4em] cursor-not-allowed flex items-center justify-center"
+                  className="w-full min-h-16 bg-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] cursor-not-allowed flex items-center justify-center"
                 >
                   Please fill all required fields
                 </button>
@@ -551,27 +557,30 @@ const Checkout = () => {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-40 space-y-8">
+            <div className="lg:sticky lg:top-28 space-y-5">
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gray-50 p-10 md:p-14 space-y-10"
+                className="bg-white border border-gray-200 p-5 sm:p-8 space-y-8"
               >
                 <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent mb-8">Order Archive</h3>
-                  <div className="space-y-6 max-h-[320px] overflow-y-auto pr-4 custom-scrollbar">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Your items</h3>
+                    <span className="text-xs text-gray-500">{cart.reduce((count, item) => count + item.quantity, 0)} pieces</span>
+                  </div>
+                  <div className="space-y-4 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
                     {cart.map((item) => {
                       const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
                       const productShippingTime = formData.country === 'kenya' 
                         ? item.shippingTime?.kenya || shippingData?.shippingTime
                         : item.shippingTime?.[countryKey] || item.shippingTime?.kenya
                       return (
-                        <div key={`${item.id}-${item.variantId}`} className="flex space-x-5 pb-4 border-b border-gray-100 last:border-0">
-                          <div className="h-20 w-16 bg-white flex-shrink-0">
-                            <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale" />
+                        <div key={`${item.id}-${item.variantId}`} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0">
+                          <div className="h-20 w-16 bg-[#f4f5f2] flex-shrink-0">
+                            <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-grow flex flex-col justify-center">
-                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 leading-tight">{item.name}</h4>
+                            <h4 className="text-xs font-bold text-primary mb-1 leading-tight">{item.name}</h4>
                             <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
                             {productShippingTime && (
                               <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
@@ -584,21 +593,21 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                <div className="space-y-5">
-                  <div className="flex justify-between text-xs font-serif italic text-gray-500">
+                <div className="space-y-4 border-t border-gray-200 pt-5">
+                  <div className="flex justify-between text-sm text-gray-500">
                     <span>Subtotal</span>
                     <span>$ {subtotal.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between text-xs font-serifitalic text-gray-500">
+                  <div className="flex justify-between text-sm text-gray-500">
                     <span>Shipping</span>
-                    <span className="text-primary font-medium">{shippingData?.cost || 'Calculating...'}</span>
+                    <span className="text-primary font-medium">$ {DELIVERY_FEE.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-xs font-serifitalic text-gray-500">
+                  <div className="flex justify-between text-sm text-gray-500">
                     <span>Shipping Time</span>
                     <span className="text-primary font-bold">{actualShippingTime || 'Calculating...'}</span>
                   </div>
-                  <div className="h-[1px] bg-gray-200" />
-                  <div className="flex justify-between pt-4 text-2xl font-black elegant-font uppercase tracking-tighter">
+                  <div className="h-px bg-gray-200" />
+                  <div className="flex justify-between pt-1 text-xl font-black elegant-font uppercase">
                     <span>Total</span>
                     <span>$ {displayAmount.toLocaleString()}</span>
                   </div>
@@ -650,7 +659,7 @@ const Checkout = () => {
                           <Truck size={18} className="text-accent mt-0.5 flex-shrink-0" />
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Shipping Cost</p>
-                            <p className="text-lg font-black elegant-font tracking-tight">{shippingData.cost}</p>
+                            <p className="text-lg font-black elegant-font tracking-tight">$ {DELIVERY_FEE.toFixed(2)}</p>
                           </div>
                         </div>
                         <div className="flex items-start space-x-4">

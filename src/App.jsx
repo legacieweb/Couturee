@@ -20,7 +20,7 @@ import ShippingPolicy from './pages/ShippingPolicy'
 import RefundsPolicy from './pages/RefundsPolicy'
 import Collection from './pages/Collection'
 import ScrollToTop from './components/ScrollToTop'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { CartProvider, useCart } from './context/CartContext'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
@@ -67,12 +67,12 @@ const Navbar = () => {
   return (
     <>
       <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-white py-4 shadow-sm' : 'bg-transparent py-8'}`}>
-        <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-3 items-center">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-12">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-3 items-center">
             
             {/* Left: Brand Name (Logo) */}
             <div className="flex">
-              <Link to="/" className="flex items-center group relative overflow-hidden py-2 px-4">
+              <Link to="/" className="flex w-max items-center group relative overflow-hidden py-2 px-0 md:px-4">
                 <div className="flex overflow-hidden relative">
                   {"SHABIL".split("").map((char, index) => (
                     <motion.span
@@ -84,7 +84,7 @@ const Navbar = () => {
                         delay: index * 0.03, 
                         ease: [0.6, 0.01, -0.05, 0.95] 
                       }}
-                      className="text-2xl md:text-4xl font-black elegant-font tracking-tighter leading-none relative block"
+                      className="text-xl sm:text-2xl md:text-4xl font-black elegant-font tracking-tighter leading-none relative block"
                     >
                       <span className="block">{char}</span>
                       <span className="absolute top-full left-0 block text-accent">{char}</span>
@@ -101,7 +101,7 @@ const Navbar = () => {
             </div>
             
             {/* Center: Navigation links */}
-            <div className="flex justify-center">
+            <div className="hidden lg:flex justify-center">
               <div className="hidden lg:flex items-center space-x-10">
                 <Link to="/products" className="group relative overflow-hidden text-[10px] font-bold uppercase tracking-[0.3em]">
                   <span className="block group-hover:-translate-y-full transition-transform duration-500">All</span>
@@ -119,14 +119,14 @@ const Navbar = () => {
             </div>
 
             {/* Right: Actions + Menu */}
-            <div className="flex justify-end items-center space-x-4 md:space-x-10">
-              <button onClick={() => setIsOpen(true)} className="lg:hidden p-2 -ml-2">
+            <div className="flex justify-end items-center gap-3 sm:gap-4 lg:gap-10">
+              <button onClick={() => setIsOpen(true)} aria-label="Open menu" className="lg:hidden p-2">
                 <Menu size={20} strokeWidth={1.5} />
               </button>
               <button onClick={() => setIsSearchOpen(true)} className="hover:text-accent transition-colors">
                 <Search size={18} strokeWidth={1.5} />
               </button>
-              <Link to={user ? (user.role === 'admin' ? '/admin/dashboard' : '/dashboard') : '/auth'} className="hover:text-accent transition-colors">
+              <Link to={user ? (user.role === 'admin' ? '/admin/dashboard' : '/dashboard') : '/auth'} className="hidden lg:inline-flex hover:text-accent transition-colors">
                 <User size={18} strokeWidth={1.5} />
               </Link>
               <Link to="/wishlist" className="relative hover:text-accent transition-colors">
@@ -157,7 +157,7 @@ const Navbar = () => {
               </button>
             </div>
 <div className="flex-grow flex flex-col items-center justify-center space-y-8">
-{['Home', 'All', 'Male', 'Female'].map((item, i) => (
+{['Home', 'All', 'Male', 'Female'].map((item) => (
                   <Link 
                     key={item} 
                     to={item === 'Home' ? '/' : item === 'All' ? '/products' : `/products?gender=${item.toLowerCase()}`}
@@ -166,12 +166,19 @@ const Navbar = () => {
                     {item}
                   </Link>
                 ))}
+                <Link
+                  to={user ? (user.role === 'admin' ? '/admin/dashboard' : '/dashboard') : '/auth'}
+                  className="flex items-center gap-3 text-base font-bold uppercase tracking-[0.2em] text-gray-500 hover:text-accent transition-colors"
+                >
+                  <User size={18} strokeWidth={1.5} />
+                  {user ? 'My Account' : 'Sign In'}
+                </Link>
              </div>
             <div className="p-12 flex justify-center space-x-8 border-t border-gray-100">
               <a href="https://www.instagram.com/shabil/" target="_blank" rel="noopener noreferrer">
                 <Instagram size={20} className="text-gray-400 hover:text-accent transition-colors" />
               </a>
-              <a href="https://www.tiktok.com/@shabil" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.tiktok.com/@shabil.fashion.co" target="_blank" rel="noopener noreferrer">
                 <svg 
                   viewBox="0 0 24 24" 
                   width="20" 
@@ -281,7 +288,7 @@ const Footer = () => (
                   </svg>
                 ), 
                 label: 'TikTok', 
-                url: 'https://www.tiktok.com/@shabil' 
+                url: 'https://www.tiktok.com/@shabil.fashion.co'
               }
             ].map((social) => (
               <a 
@@ -409,6 +416,7 @@ const Footer = () => (
 
 function App() {
   const location = useLocation()
+  const shouldReduceMotion = useReducedMotion()
   const isDashboardPath = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/admin')
   const isAdminPath = location.pathname.startsWith('/admin')
 
@@ -419,7 +427,16 @@ function App() {
           <div className="min-h-screen flex flex-col selection:bg-accent selection:text-white">
           {!isDashboardPath && <Navbar />}
           <main className="flex-grow">
-            <Routes>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: 'easeOut' }}
+                className="min-h-full"
+              >
+            <Routes location={location}>
               <Route path="/" element={<Home />} />
 <Route path="/products" element={<Products />} />
                <Route path="/collections" element={<Products />} />
@@ -453,6 +470,8 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/thank-you" element={<ThankYou />} />
             </Routes>
+              </motion.div>
+            </AnimatePresence>
           </main>
           {!isDashboardPath && <Footer />}
         </div>

@@ -230,37 +230,37 @@ const SHIPPING_CONFIG = {
   kenya: {
     country: 'Kenya',
     shippingTime: '2-3 Business Days',
-    cost: '$3',
+    cost: '$1',
     regions: ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
   },
   usa: {
     country: 'USA',
     shippingTime: '7-10 Business Days',
-    cost: '$35',
+    cost: '$1',
     regions: []
   },
   uk: {
     country: 'UK',
     shippingTime: '7-10 Business Days',
-    cost: '$35',
+    cost: '$1',
     regions: []
   },
   canada: {
     country: 'Canada',
     shippingTime: '7-10 Business Days',
-    cost: '$35',
+    cost: '$1',
     regions: []
   },
   japan: {
     country: 'Japan',
     shippingTime: '10-14 Business Days',
-    cost: '$45',
+    cost: '$1',
     regions: []
   },
   southafrica: {
     country: 'South Africa',
     shippingTime: '5-7 Business Days',
-    cost: '$30',
+    cost: '$1',
     regions: []
   }
 };
