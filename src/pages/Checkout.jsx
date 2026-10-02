@@ -1,32 +1,45 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShieldCheck, Lock, CreditCard, Check, Package, Globe, Truck, Clock, ChevronRight, Loader2, X, MapPin } from 'lucide-react'
+import { ShieldCheck, Lock, CreditCard, Check, Package, Globe, Truck, Clock, ChevronRight, X, MapPin } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { api } from '../utils/api'
+import { products } from '../data/products'
 import { PaystackButton } from 'react-paystack'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
-const COUNTRY_LIST = [
-  { value: 'kenya', label: 'Kenya (Domestic)', flag: '🇰🇪' },
-  { value: 'usa', label: 'United States', flag: '🇺🇸' },
-  { value: 'uk', label: 'United Kingdom', flag: '🇬🇧' },
-  { value: 'canada', label: 'Canada', flag: '🇨🇦' },
-  { value: 'japan', label: 'Japan', flag: '🇯🇵' },
-  { value: 'southafrica', label: 'South Africa', flag: '🇿🇦' }
-]
-
-const SHIPPING_TIMES = {
-  kenya: '2-3 Business Days',
-  usa: '7-10 Business Days',
-  uk: '7-10 Business Days',
-  canada: '7-10 Business Days',
-  japan: '10-14 Business Days',
-  southafrica: '5-7 Business Days'
+const COUNTRY_DETAILS = {
+  kenya: { label: 'Kenya (Domestic)', flag: '🇰🇪' },
+  usa: { label: 'United States', flag: '🇺🇸' },
+  uk: { label: 'United Kingdom', flag: '🇬🇧' },
+  canada: { label: 'Canada', flag: '🇨🇦' },
+  japan: { label: 'Japan', flag: '🇯🇵' },
+  southafrica: { label: 'South Africa', flag: '🇿🇦' },
+  china: { label: 'China', flag: '🇨🇳' }
 }
+const KENYA_REGIONS = ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
 const DELIVERY_FEE = 1
+
+const normalizeCountryKey = (key) => key.toLowerCase()
+
+const getProductShippingTimes = (item) => {
+  const product = products.find((entry) => entry.id === item.id)
+  return product?.shippingTime || item.shippingTime || {}
+}
+
+const getShippingTimeForCountry = (item, country) => {
+  const shippingTimes = getProductShippingTimes(item)
+  const key = Object.keys(shippingTimes).find((countryKey) => normalizeCountryKey(countryKey) === country)
+  return key ? shippingTimes[key] : ''
+}
+
+const getCountryLabel = (country) => COUNTRY_DETAILS[country]?.label || country.replace(/([a-z])([A-Z])/g, '$1 $2')
+
+const getSupportedCountryLabels = (item) => [...new Set(
+  Object.keys(getProductShippingTimes(item)).map(normalizeCountryKey)
+)].map((country) => COUNTRY_DETAILS[country]?.label.replace(' (Domestic)', '') || getCountryLabel(country))
 
 const SmoothCounter = ({ target, prefix = '', suffix = '' }) => {
   const [display, setDisplay] = useState('0')
@@ -116,7 +129,7 @@ const SuccessPopup = ({ order, onClose }) => (
   </motion.div>
 )
 
-const CountrySelectorPopup = ({ isOpen, onClose, onSelectCountry }) => {
+const CountrySelectorPopup = ({ isOpen, onClose, onSelectCountry, countries }) => {
   if (!isOpen) return null
   
   return (
@@ -143,7 +156,7 @@ const CountrySelectorPopup = ({ isOpen, onClose, onSelectCountry }) => {
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            {COUNTRY_LIST.map((country) => (
+            {countries.map((country) => (
               <button
                 key={country.value}
                 onClick={() => {
@@ -155,7 +168,7 @@ const CountrySelectorPopup = ({ isOpen, onClose, onSelectCountry }) => {
                 <span className="text-2xl">{country.flag}</span>
                 <div className="text-left">
                   <p className="text-sm font-bold">{country.label}</p>
-                  <p className="text-[10px] text-gray-500">Delivery: {SHIPPING_TIMES[country.value]}</p>
+                  <p className="text-[10px] text-gray-500">Delivery: {country.shippingTime}</p>
                 </div>
               </button>
             ))}
@@ -173,11 +186,6 @@ const Checkout = () => {
   const [showSuccess, setShowSuccess] = useState(false)
   const [orderInfo, setOrderInfo] = useState(null)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
-  const [shippingData, setShippingData] = useState(null)
-  const [shippingLoading, setShippingLoading] = useState(false)
-  const [shippingError, setShippingError] = useState('')
-  const [shippingCache, setShippingCache] = useState({})
-  const [mounted, setMounted] = useState(false)
   const [showCountryPopup, setShowCountryPopup] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -185,51 +193,41 @@ const Checkout = () => {
     email: user?.email || '',
     address: '',
     city: 'Nairobi',
-    country: 'kenya',
+    country: '',
     phone: ''
   })
 
-  useEffect(() => { setMounted(true) }, [])
-
-  const fetchShippingTime = useCallback(async (country) => {
-    if (shippingCache[country]) {
-      setShippingData(shippingCache[country])
-      setShippingError('')
-      return
-    }
-    setShippingLoading(true)
-    setShippingError('')
-    try {
-      const response = await api.getShippingTime(country)
-      const data = response.data
-      setShippingData(data)
-      setShippingCache(prev => ({ ...prev, [country]: data }))
-    } catch (err) {
-      console.error('Failed to fetch shipping time:', err)
-      const countryLabel = COUNTRY_LIST.find((option) => option.value === country)?.label.replace(' (Domestic)', '') || country
-      setShippingError('')
-      setShippingData({
-        country: countryLabel,
-        shippingTime: SHIPPING_TIMES[country],
-        cost: `$${DELIVERY_FEE}`,
-        regions: country === 'kenya'
-          ? ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Kiambu', 'Other (Rest of Kenya)']
-          : []
-      })
-    } finally {
-      setShippingLoading(false)
-    }
-  }, [shippingCache])
+  const countries = useMemo(() => {
+    if (cart.length === 0) return []
+    const productCountryKeys = cart.map((item) =>
+      Object.keys(getProductShippingTimes(item)).map(normalizeCountryKey)
+    )
+    const supportedKeys = productCountryKeys[0].filter((country) =>
+      productCountryKeys.every((keys) => keys.includes(country))
+    )
+    return supportedKeys.map((value) => ({
+      value,
+      ...(COUNTRY_DETAILS[value] || { label: getCountryLabel(value), flag: '' }),
+      shippingTime: [...new Set(cart.map((item) => getShippingTimeForCountry(item, value)))].join(' / ')
+    }))
+  }, [cart])
 
   useEffect(() => {
-    if (formData.country && mounted) {
-      fetchShippingTime(formData.country)
+    if (countries.length > 0 && !countries.some((country) => country.value === formData.country)) {
+      setFormData((prev) => ({ ...prev, country: countries[0].value }))
     }
-  }, [formData.country, fetchShippingTime, mounted])
+  }, [countries, formData.country])
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)
   const orderTotal = subtotal + DELIVERY_FEE
-  const actualShippingTime = SHIPPING_TIMES[formData.country] || shippingData?.shippingTime
+  const itemShippingTimes = cart.map((item) => getShippingTimeForCountry(item, formData.country)).filter(Boolean)
+  const uniqueShippingTimes = [...new Set(itemShippingTimes)]
+  const actualShippingTime = uniqueShippingTimes.length === 1
+    ? uniqueShippingTimes[0]
+    : uniqueShippingTimes.length > 1
+      ? 'Varies by item'
+      : ''
+  const selectedCountry = countries.find((country) => country.value === formData.country)
 
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY
 
@@ -271,7 +269,7 @@ const Checkout = () => {
     doc.text(`Customer: ${order.customer_name}`, 20, 59)
     doc.text(`Method: Doorstep Delivery`, 20, 66)
     doc.text(`Reference: ${order.payment_reference}`, 20, 77)
-    doc.text(`Shipping Time: ${actualShippingTime || 'Calculating'}`, 20, 84)
+    doc.text(`Shipping Time: ${actualShippingTime || 'Unavailable'}`, 20, 84)
     const tableData = order.items.map(item => [
       item.name,
       `${item.selectedSize} / ${item.selectedColor}`,
@@ -357,7 +355,7 @@ const Checkout = () => {
     return null
   }
 
-  const isFormValid = formData.name && formData.email && formData.address && formData.phone && (formData.country === 'kenya' ? formData.city : formData.country)
+  const isFormValid = formData.name && formData.email && formData.address && formData.phone && selectedCountry && (formData.country === 'kenya' ? formData.city : formData.country)
 
   return (
     <div className="pt-28 md:pt-36 pb-20 bg-[#f4f5f2] min-h-screen">
@@ -365,6 +363,7 @@ const Checkout = () => {
         isOpen={showCountryPopup} 
         onClose={() => setShowCountryPopup(false)} 
         onSelectCountry={handleSelectCountry}
+        countries={countries}
       />
 
       <AnimatePresence>
@@ -450,11 +449,12 @@ const Checkout = () => {
                         <button
                           type="button"
                           onClick={() => setShowCountryPopup(true)}
+                          disabled={countries.length === 0}
                           className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans flex items-center justify-between"
                         >
                           <span className="flex items-center space-x-2">
                             <MapPin size={16} className="text-accent" />
-                            <span>{COUNTRY_LIST.find(c => c.value === formData.country)?.flag} {COUNTRY_LIST.find(c => c.value === formData.country)?.label}</span>
+                            <span>{selectedCountry?.flag} {selectedCountry?.label || 'No supported destination'}</span>
                           </span>
                           <ChevronRight size={16} className="text-gray-400" />
                         </button>
@@ -470,7 +470,7 @@ const Checkout = () => {
                           onChange={handleInputChange}
                           className="w-full border border-gray-200 bg-white px-3 py-3 text-sm focus:outline-none focus:border-primary font-sans" 
                         >
-                          {shippingData?.regions?.map(r => (
+                          {KENYA_REGIONS.map(r => (
                             <option key={r} value={r}>{r}</option>
                           ))}
                         </select>
@@ -490,18 +490,11 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  <AnimatePresence mode="wait">
-                    {shippingError && (
-                      <motion.p 
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="text-[10px] text-accent font-bold uppercase tracking-widest"
-                      >
-                        {shippingError}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
+                  {countries.length === 0 && (
+                    <p className="text-[10px] text-accent font-bold uppercase tracking-widest">
+                      The products in your cart do not share a supported shipping destination.
+                    </p>
+                  )}
                 </div>
               </section>
 
@@ -570,10 +563,7 @@ const Checkout = () => {
                   </div>
                   <div className="space-y-4 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
                     {cart.map((item) => {
-                      const countryKey = formData.country === 'southafrica' ? 'southAfrica' : formData.country
-                      const productShippingTime = formData.country === 'kenya' 
-                        ? item.shippingTime?.kenya || shippingData?.shippingTime
-                        : item.shippingTime?.[countryKey] || item.shippingTime?.kenya
+                      const productShippingTime = getShippingTimeForCountry(item, formData.country)
                       return (
                         <div key={`${item.id}-${item.variantId}`} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0">
                           <div className="h-20 w-16 bg-[#f4f5f2] flex-shrink-0">
@@ -582,9 +572,12 @@ const Checkout = () => {
                           <div className="flex-grow flex flex-col justify-center">
                             <h4 className="text-xs font-bold text-primary mb-1 leading-tight">{item.name}</h4>
                             <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Size {item.selectedSize} / {item.selectedColor} x {item.quantity}</p>
-                            {productShippingTime && (
-                              <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">Est. Delivery: {productShippingTime}</p>
-                            )}
+                            <p className="text-[8px] font-bold uppercase tracking-[0.1em] text-accent mb-1">
+                              Est. Delivery: {productShippingTime || 'Unavailable'}
+                            </p>
+                            <p className="text-[8px] text-gray-400 mb-1">
+                              Ships to: {getSupportedCountryLabels(item).join(', ') || 'No destinations listed'}
+                            </p>
                             <p className="text-xs font-black elegant-font">$ {(item.price * item.quantity).toLocaleString()}</p>
                           </div>
                         </div>
@@ -604,7 +597,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Shipping Time</span>
-                    <span className="text-primary font-bold">{actualShippingTime || 'Calculating...'}</span>
+                    <span className="text-primary font-bold">{actualShippingTime || 'Unavailable'}</span>
                   </div>
                   <div className="h-px bg-gray-200" />
                   <div className="flex justify-between pt-1 text-xl font-black elegant-font uppercase">
@@ -615,24 +608,7 @@ const Checkout = () => {
               </motion.div>
 
               <AnimatePresence mode="wait">
-                {shippingLoading && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="bg-primary text-white p-10 md:p-14 space-y-6"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <Loader2 className="animate-spin" size={20} />
-                      <span className="text-[10px] font-bold uppercase tracking-[0.4em]">Calculating Delivery</span>
-                    </div>
-                    <p className="text-xs font-serif italic text-white/70">
-                      Fetching the most accurate delivery estimate for your destination...
-                    </p>
-                  </motion.div>
-                )}
-
-                {!shippingLoading && shippingData && (
+                {selectedCountry && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -641,13 +617,13 @@ const Checkout = () => {
                   >
                     <div className="flex items-center justify-between">
                       <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-accent">Delivery To</h3>
-                      <span className="text-2xl">{COUNTRY_LIST.find(c => c.value === formData.country)?.flag}</span>
+                      <span className="text-2xl">{selectedCountry.flag}</span>
                     </div>
                     <div className="space-y-6">
                       <div className="flex items-start space-x-5">
                         <Globe size={20} className="text-accent mt-1 flex-shrink-0" />
                         <div>
-                          <p className="text-3xl font-black elegant-font tracking-tighter">{shippingData.country}</p>
+                          <p className="text-3xl font-black elegant-font tracking-tighter">{selectedCountry.label}</p>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mt-1">
                             {formData.country === 'kenya' && formData.city ? formData.city : 'International'}
                           </p>
